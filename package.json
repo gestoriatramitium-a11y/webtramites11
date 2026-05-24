@@ -1,0 +1,16 @@
+{
+  "name": "tramitium-stripe-emailjs-corrected",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tramitium website with real Stripe PaymentIntent flow and EmailJS server-side notification.",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static site: no build step'"
+  },
+  "dependencies": {
+    "stripe": "^17.5.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.38.1"
+  }
+}
