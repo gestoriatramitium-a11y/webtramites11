@@ -3,7 +3,6 @@
   'prop-inscripcion': { tag: 'Registro de la Propiedad', title: 'Inscripci?n de Escritura', price: 150 },
   'prop-certificacion': { tag: 'Registro de la Propiedad', title: 'Certificaci?n Registral', price: 95 },
   'prop-cancelacion': { tag: 'Registro de la Propiedad', title: 'Cancelaci?n de Carga', price: 230 },
-  'prop-anotacion': { tag: 'Registro de la Propiedad', title: 'Anotaci?n Preventiva', price: 135 },
   'prop-localizacion': { tag: 'Registro de la Propiedad', title: 'Nota de Localizaci?n de Propiedades', price: 25 },
   'civil-nacimiento': { tag: 'Registro Civil', title: 'Certificado de Nacimiento', price: 35 },
   'civil-matrimonio': { tag: 'Registro Civil', title: 'Certificado de Matrimonio', price: 35 },
