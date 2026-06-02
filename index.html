@@ -120,7 +120,7 @@
   .services-bg-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Playfair Display', serif; font-size: clamp(100px, 20vw, 280px); font-weight: 700; color: rgba(255,255,255,0.015); white-space: nowrap; pointer-events: none; user-select: none; }
   .services-section .section-title { color: var(--white); }
   .services-section .section-subtitle { color: rgba(255,255,255,0.55); }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 1320px; margin: 0 auto; }
+  .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; max-width: 1480px; margin: 0 auto; }
   .registry-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.15); padding: clamp(30px, 4vw, 48px) clamp(20px, 3vw, 40px); transition: all 0.4s; position: relative; overflow: hidden; }
   .registry-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
   .registry-card:hover { background: rgba(255,255,255,0.07); transform: translateY(-4px); }
@@ -347,10 +347,10 @@
       <p class="registry-desc">Inscripciones, notas simples y certificaciones relativas a bienes inmuebles y derechos reales.</p>
       <ul class="services-list">
         <li onclick="openModal('prop-nota-simple')">Nota Simple Informativa <span class="service-price">desde 35€</span></li>
-        <li onclick="openModal('prop-inscripcion')">Inscripción de Escritura <span class="service-price">desde 85€</span></li>
-        <li onclick="openModal('prop-certificacion')">Certificación Registral <span class="service-price">desde 65€</span></li>
-        <li onclick="openModal('prop-cancelacion')">Cancelación de Carga <span class="service-price">desde 120€</span></li>
-        <li onclick="openModal('prop-anotacion')">Anotación Preventiva <span class="service-price">desde 90€</span></li>
+        <li onclick="openModal('prop-inscripcion')">Inscripción de Escritura <span class="service-price">desde 150€</span></li>
+        <li onclick="openModal('prop-certificacion')">Certificación Registral <span class="service-price">desde 95€</span></li>
+        <li onclick="openModal('prop-cancelacion')">Cancelación de Carga <span class="service-price">desde 230€</span></li>
+        <li onclick="openModal('prop-localizacion')">Nota de Localización de Propiedades <span class="service-price">desde 25€</span></li>
       </ul>
     </div>
     <div class="registry-card reveal">
@@ -365,14 +365,22 @@
       </ul>
     </div>
     <div class="registry-card reveal">
-      <span class="registry-number">03</span><div class="registry-icon">▣</div><span class="registry-subtitle">Registro 03</span><h3 class="registry-title">Registro Mercantil y Tr?fico</h3>
-      <p class="registry-desc">Constitución y gestión de sociedades, depósito de cuentas y certificaciones de denominación social.</p>
+      <span class="registry-number">03</span><div class="registry-icon">▣</div><span class="registry-subtitle">Registro 03</span><h3 class="registry-title">Registro Mercantil</h3>
+      <p class="registry-desc">Constitución y gestión de sociedades, depósito de cuentas, certificaciones y notas mercantiles.</p>
       <ul class="services-list">
-        <li onclick="openModal('merc-denominacion')">Denominación Social <span class="service-price">desde 40€</span></li>
-        <li onclick="openModal('merc-deposito')">Depósito de Cuentas Anuales <span class="service-price">desde 120€</span></li>
-        <li onclick="openModal('merc-certificacion')">Certificación Registral <span class="service-price">desde 55€</span></li>
-        <li onclick="openModal('merc-inscripcion')">Inscripción de Escritura <span class="service-price">desde 140€</span></li>
-        <li onclick="openModal('merc-nota')">Nota Simple Mercantil <span class="service-price">desde 35€</span></li>
+        <li onclick="openModal('merc-denominacion')">Denominación Social <span class="service-price">desde 60€</span></li>
+        <li onclick="openModal('merc-deposito')">Depósito de Cuentas Anuales <span class="service-price">desde 150€</span></li>
+        <li onclick="openModal('merc-certificacion')">Certificación Registral <span class="service-price">desde 80€</span></li>
+        <li onclick="openModal('merc-inscripcion')">Inscripción de Escritura <span class="service-price">desde 205€</span></li>
+        <li onclick="openModal('merc-nota')">Nota Simple Mercantil <span class="service-price">desde 25€</span></li>
+      </ul>
+    </div>
+    <div class="registry-card reveal">
+      <span class="registry-number">04</span><div class="registry-icon">§</div><span class="registry-subtitle">Trámite 04</span><h3 class="registry-title">Otros servicios</h3>
+      <p class="registry-desc">Informes de vehículos y elaboración de contratos privados adaptados a cada operación.</p>
+      <ul class="services-list">
+        <li onclick="openModal('trafico-informe-matricula')">Informe DGT por Matrícula <span class="service-price">desde 25€</span></li>
+        <li onclick="openModal('contrato-privado')">Elaboración de Contrato Privado <span class="service-price">desde 40€</span></li>
       </ul>
     </div>
   </div>
@@ -492,7 +500,6 @@ const SERVICES = {
   'prop-inscripcion': { tag: 'Registro de la Propiedad', title: 'Inscripción de Escritura', price: 150, info: 'Presentación telemática de escrituras de compraventa, herencia, donación, etc.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_dni', label: 'DNI / NIE del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { section: 'Datos de la escritura' }, { id: 'tipo_escritura', label: 'Tipo de escritura', type: 'select', options: ['Compraventa', 'Herencia', 'Donación', 'Hipoteca', 'Otra'], required: true }, { id: 'notario', label: 'Notario autorizante', type: 'text', required: true }, { id: 'fecha_esc', label: 'Fecha de escritura', type: 'date', required: true } ] },
   'prop-certificacion': { tag: 'Registro de la Propiedad', title: 'Certificación Registral', price: 95, info: 'Documento oficial con eficacia jurídica sobre el estado de una finca.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'finca_dir', label: 'Dirección completa', type: 'text', required: true, full: true } ] },
   'prop-cancelacion': { tag: 'Registro de la Propiedad', title: 'Cancelación de Carga', price: 230, info: 'Gestión de la cancelación registral de hipotecas u otras cargas.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'finca_dir', label: 'Dirección', type: 'text', required: true, full: true }, { id: 'banco', label: 'Entidad / banco', type: 'text', required: true } ] },
-  'prop-anotacion': { tag: 'Registro de la Propiedad', title: 'Anotación Preventiva', price: 135, info: 'Solicitud de anotación de demanda o embargo.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'finca_dir', label: 'Dirección finca', type: 'text', required: true, full: true } ] },
   'prop-localizacion': { tag: 'Registro de la Propiedad', title: 'Nota de Localización de Propiedades', price: 25, info: 'Localización de propiedades inscritas a nombre del solicitante original.', fields: [ { id: 'sol_nombre', label: 'Nombre completo del solicitante original', type: 'text', required: true, full: true }, { id: 'sol_dni', label: 'DNI / NIE del solicitante original', type: 'text', required: true }, { id: 'sol_contacto', label: 'Datos de contacto del solicitante original', type: 'text', required: false, full: true } ] },
   'civil-nacimiento': { tag: 'Registro Civil', title: 'Certificado de Nacimiento', price: 35, info: 'Obtención del certificado literal, extracto o plurilingüe.', fields: withAuthorization([ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { section: 'Datos del inscrito' }, { id: 'inscrito_nombre', label: 'Nombre inscrito', type: 'text', required: true, full: true }, { id: 'fecha_nac', label: 'Fecha nacimiento', type: 'date', required: true }, { id: 'lugar_nac', label: 'Lugar nacimiento', type: 'text', required: true } ]) },
   'civil-matrimonio': { tag: 'Registro Civil', title: 'Certificado de Matrimonio', price: 35, info: 'Certificado que acredita la celebración del matrimonio.', fields: withAuthorization([ { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'conyuge1', label: 'Cónyuge 1', type: 'text', required: true }, { id: 'conyuge2', label: 'Cónyuge 2', type: 'text', required: true }, { id: 'fecha_mat', label: 'Fecha matrimonio', type: 'date', required: true } ]) },
@@ -505,7 +512,8 @@ const SERVICES = {
   'merc-certificacion': { tag: 'Registro Mercantil', title: 'Certificación Registral Mercantil', price: 80, info: 'Certificado oficial sobre situación societaria.', fields: withAuthorization([ { id: 'sociedad', label: 'Sociedad', type: 'text', required: true, full: true }, { id: 'cif', label: 'CIF', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true } ]) },
   'merc-inscripcion': { tag: 'Registro Mercantil', title: 'Inscripción de Escritura Mercantil', price: 205, info: 'Presentación de constitución, modificación estatutaria, etc.', fields: withAuthorization([ { id: 'sociedad', label: 'Sociedad', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'tipo_escritura', label: 'Tipo', type: 'text', required: true } ]) },
   'merc-nota': { tag: 'Registro Mercantil', title: 'Nota Simple Mercantil', price: 25, info: 'Información registral básica de una sociedad.', fields: withAuthorization([ { id: 'sociedad', label: 'Sociedad', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true } ]) },
-  'trafico-informe-matricula': { tag: 'Tráfico', title: 'Informe de Tráfico de un Vehículo por Matrícula', price: 25, info: 'Informe del vehículo solicitado a partir de su matrícula.', fields: [ { id: 'matricula', label: 'Matrícula del vehículo', type: 'text', required: true }, { id: 'titular_nombre', label: 'Nombre completo del titular del vehículo', type: 'text', required: true, full: true }, { id: 'titular_dni', label: 'DNI / NIE del titular del vehículo', type: 'text', required: true }, ...AUTH_FIELDS ] }
+  'trafico-informe-matricula': { tag: 'Tráfico', title: 'Informe de Tráfico de un Vehículo por Matrícula', price: 25, info: 'Informe del vehículo solicitado a partir de su matrícula.', fields: [ { id: 'matricula', label: 'Matrícula del vehículo', type: 'text', required: true }, { id: 'titular_nombre', label: 'Nombre completo del titular del vehículo', type: 'text', required: true, full: true }, { id: 'titular_dni', label: 'DNI / NIE del titular del vehículo', type: 'text', required: true }, ...AUTH_FIELDS ] },
+  'contrato-privado': { tag: 'Otros servicios', title: 'Elaboración de Contrato Privado', price: 40, info: 'Redacción de contrato privado adaptado a la operación indicada por el cliente.', fields: [ { id: 'sol_nombre', label: 'Nombre completo del solicitante original', type: 'text', required: true, full: true }, { id: 'sol_dni', label: 'DNI / NIE del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'sol_telefono', label: 'Teléfono de contacto', type: 'text', required: false }, { section: 'Datos del contrato' }, { id: 'tipo_contrato', label: 'Tipo de contrato', type: 'select', options: ['Compraventa de vehículo', 'Préstamo entre particulares', 'Alquiler', 'Reconocimiento de deuda', 'Prestación de servicios', 'Reserva', 'Cesión', 'Otro'], required: true, full: true }, { id: 'partes_contrato', label: 'Datos de las partes intervinientes', type: 'textarea', placeholder: 'Nombre, DNI/CIF, domicilio y papel de cada parte...', required: true, full: true }, { id: 'objeto_contrato', label: 'Objeto de la operación', type: 'textarea', placeholder: 'Describa el bien, servicio, deuda, préstamo u operación que debe regularse...', required: true, full: true }, { id: 'importe_operacion', label: 'Precio o importe pactado', type: 'text', placeholder: 'Ej. 4.500 €', required: false }, { id: 'forma_pago', label: 'Forma de pago', type: 'text', placeholder: 'Transferencia, efectivo, plazos...', required: false }, { id: 'fecha_plazo', label: 'Fecha de entrega o plazo previsto', type: 'text', required: false }, { id: 'condiciones_especiales', label: 'Condiciones, garantías o cláusulas especiales', type: 'textarea', placeholder: 'Indique cualquier pacto relevante, documentación entregada, responsabilidades o penalizaciones...', required: false, full: true }, { id: 'documentacion_contrato', label: 'Documentación de apoyo', type: 'file', accept: '.pdf,.jpg,.jpeg,.png,.doc,.docx', required: false, full: true } ] }
 };
 
 function toggleMenu() { document.querySelector('.nav-links').classList.toggle('active'); }
@@ -1075,7 +1083,7 @@ const GUIDED_CHAT = {
       },
       cuentas: {
         title: 'Depósito de Cuentas Anuales',
-        serviceKey: 'merc-cuentas',
+        serviceKey: 'merc-deposito',
         answers: {
           paraQue: 'Sirve para cumplir la obligación legal de presentar las cuentas de una sociedad ante el Registro Mercantil.',
           contiene: 'Puede incluir balance, cuenta de pérdidas y ganancias, memoria, certificación de aprobación e informe de auditoría cuando proceda.',
