@@ -1,5 +1,5 @@
 const Stripe = require('stripe');
-const { SERVICES, jsonResponse, parseJson, isEmail, cleanText, getServicePrice } = require('./_services');
+const { SERVICES, jsonResponse, parseJson, isEmail, cleanText } = require('./_services');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -19,12 +19,11 @@ exports.handler = async (event) => {
 
   const clientEmail = cleanText(body.clientEmail, 180);
   const reference = cleanText(body.reference, 60) || `TRM-${Date.now().toString().slice(-8)}`;
-  const amount = getServicePrice(serviceKey, service, body.formData);
 
   try {
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100,
+      amount: service.price * 100,
       currency: 'eur',
       payment_method_types: ['card'],
       description: `${service.title} · ${reference}`,
@@ -33,7 +32,6 @@ exports.handler = async (event) => {
         reference,
         service_key: serviceKey,
         service_title: service.title,
-        service_amount: String(amount),
         client_email: clientEmail
       }
     });
@@ -41,7 +39,7 @@ exports.handler = async (event) => {
     return jsonResponse(200, {
       clientSecret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
-      amount,
+      amount: service.price,
       currency: 'eur',
       reference
     });

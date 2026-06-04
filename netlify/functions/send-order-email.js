@@ -5,7 +5,6 @@ const {
   parseJson,
   cleanText,
   formDataToText,
-  getServicePrice,
   sendEmailJS
 } = require('./_services');
 
@@ -29,7 +28,9 @@ exports.handler = async (event) => {
   const reference = cleanText(body.reference, 60);
   const clientEmail = cleanText(body.clientEmail, 180);
   const formDataText = formDataToText(body.formData);
-  const amount = getServicePrice(serviceKey, service, body.formData);
+  const authorization = body.attachments && body.attachments.autorizacion;
+  const authorizationFile = authorization && typeof authorization.content === 'string' ? authorization.content : '';
+  const authorizationFileName = authorization && typeof authorization.name === 'string' ? authorization.name : 'autorizacion';
 
   try {
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
@@ -39,20 +40,22 @@ exports.handler = async (event) => {
       return jsonResponse(402, { error: 'El pago todavía no figura como completado en Stripe.' });
     }
 
-    if (intent.amount_received < amount * 100 || intent.currency !== 'eur') {
+    if (intent.amount_received < service.price * 100 || intent.currency !== 'eur') {
       return jsonResponse(402, { error: 'El importe recibido no coincide con el servicio solicitado.' });
     }
 
     await sendEmailJS({
       service_title: service.title,
       service_tag: service.tag,
-      price: `${amount}€`,
+      price: `${service.price}€`,
       reference,
       client_email: clientEmail || intent.receipt_email || 'No indicado',
       form_data: formDataText,
       payment_id: paymentIntentId,
       reply_to: clientEmail || intent.receipt_email || '',
-      admin_email: process.env.ADMIN_EMAIL || 'gestoriatramitium@gmail.com'
+      admin_email: process.env.ADMIN_EMAIL || 'gestoriatramitium@gmail.com',
+      authorization_file: authorizationFile,
+      authorization_filename: authorizationFileName
     });
 
     return jsonResponse(200, { ok: true });
