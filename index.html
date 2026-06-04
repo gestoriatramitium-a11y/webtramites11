@@ -288,6 +288,7 @@
     <li><a href="#servicios" onclick="closeMenu()">Servicios</a></li>
     <li><a href="#proceso" onclick="closeMenu()">Cómo funciona</a></li>
     <li><a href="nosotros.html" onclick="closeMenu()">Nosotros</a></li>
+    <li><a href="blog.html" onclick="closeMenu()">Blog</a></li>
     <li><a href="#contacto" class="nav-cta" onclick="closeMenu()">Contactar</a></li>
   </ul>
 </nav>
@@ -352,7 +353,7 @@
       <span class="registry-number">01</span><div class="registry-icon">⌂</div><span class="registry-subtitle">Registro 01</span><h3 class="registry-title">Registro de la Propiedad</h3>
       <p class="registry-desc">Inscripciones, notas simples y certificaciones relativas a bienes inmuebles y derechos reales.</p>
       <ul class="services-list">
-        <li onclick="openModal('prop-nota-simple')">Nota Simple Informativa <span class="service-price">desde 35€</span></li>
+        <li onclick="openModal('prop-nota-simple')">Nota Simple Informativa <span class="service-price">desde 25€</span></li>
         <li onclick="openModal('prop-inscripcion')">Inscripción de Escritura <span class="service-price">desde 150€</span></li>
         <li onclick="openModal('prop-certificacion')">Certificación Registral <span class="service-price">desde 95€</span></li>
         <li onclick="openModal('prop-cancelacion')">Cancelación de Carga <span class="service-price">desde 230€</span></li>
@@ -503,7 +504,7 @@ function ensureStripe() {
 function withAuthorization(fields) { return [...fields, ...AUTH_FIELDS]; }
 
 const SERVICES = {
-  'prop-nota-simple': { tag: 'Registro de la Propiedad', title: 'Nota Simple Informativa', price: 35, info: 'La nota simple informa sobre la titularidad y cargas de una finca registral. Se tramita ante el Registro de la Propiedad correspondiente.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', placeholder: 'Nombre completo', required: true }, { id: 'sol_dni', label: 'DNI / NIE del solicitante original', type: 'text', placeholder: 'XXXXXXXXX', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', placeholder: 'correo@ejemplo.com', required: true }, { section: 'Datos del inmueble' }, { id: 'finca_dir', label: 'Dirección del inmueble', type: 'text', placeholder: 'Calle, número, piso...', required: true, full: true }, { id: 'finca_municipio', label: 'Municipio', type: 'text', placeholder: 'Municipio', required: true }, { id: 'finca_provincia', label: 'Provincia', type: 'text', placeholder: 'Provincia', required: true } ] },
+  'prop-nota-simple': { tag: 'Registro de la Propiedad', title: 'Nota Simple Informativa', price: 25, info: 'La nota simple informa sobre la titularidad y cargas de una finca registral. Se tramita ante el Registro de la Propiedad correspondiente.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', placeholder: 'Nombre completo', required: true }, { id: 'sol_dni', label: 'DNI / NIE del solicitante original', type: 'text', placeholder: 'XXXXXXXXX', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', placeholder: 'correo@ejemplo.com', required: true }, { section: 'Datos del inmueble' }, { id: 'finca_dir', label: 'Dirección del inmueble', type: 'text', placeholder: 'Calle, número, piso...', required: true, full: true }, { id: 'finca_municipio', label: 'Municipio', type: 'text', placeholder: 'Municipio', required: true }, { id: 'finca_provincia', label: 'Provincia', type: 'text', placeholder: 'Provincia', required: true } ] },
   'prop-inscripcion': { tag: 'Registro de la Propiedad', title: 'Inscripción de Escritura', price: 150, info: 'Presentación telemática de escrituras de compraventa, herencia, donación, etc.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_dni', label: 'DNI / NIE del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { section: 'Datos de la escritura' }, { id: 'tipo_escritura', label: 'Tipo de escritura', type: 'select', options: ['Compraventa', 'Herencia', 'Donación', 'Hipoteca', 'Otra'], required: true }, { id: 'notario', label: 'Notario autorizante', type: 'text', required: true }, { id: 'fecha_esc', label: 'Fecha de escritura', type: 'date', required: true } ] },
   'prop-certificacion': { tag: 'Registro de la Propiedad', title: 'Certificación Registral', price: 95, info: 'Documento oficial con eficacia jurídica sobre el estado de una finca.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'finca_dir', label: 'Dirección completa', type: 'text', required: true, full: true } ] },
   'prop-cancelacion': { tag: 'Registro de la Propiedad', title: 'Cancelación de Carga', price: 230, info: 'Gestión de la cancelación registral de hipotecas u otras cargas.', fields: [ { id: 'sol_nombre', label: 'Nombre del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'finca_dir', label: 'Dirección', type: 'text', required: true, full: true }, { id: 'banco', label: 'Entidad / banco', type: 'text', required: true } ] },
@@ -833,7 +834,7 @@ const CHAT_KNOWLEDGE = [
   {
     title: 'Precios y pago',
     keywords: ['precio', 'cuesta', 'coste', 'tarifa', 'pago', 'pagar', 'stripe'],
-    answer: 'Los precios aparecen junto a cada trámite. Como referencia, la Nota Simple Informativa parte de 35 €, la Nota de Localización de Propiedades de 25 €, la Nota Simple Mercantil de 25 € y el Informe de Tráfico por matrícula de 25 €. El pago se realiza de forma segura con Stripe.'
+    answer: 'Los precios aparecen junto a cada trámite. Como referencia, la Nota Simple Informativa parte de 25 €, la Nota de Localización de Propiedades de 25 €, la Nota Simple Mercantil de 25 € y el Informe de Tráfico por matrícula de 25 €. El pago se realiza de forma segura con Stripe.'
   },
   {
     title: 'Nota Simple Informativa',
@@ -1298,7 +1299,7 @@ function showGuidedAnswer(questionKey) {
 
 function showGuidedPrices() {
   addChatMessage('user', 'Precios y pago');
-  addChatMessage('bot', 'Los precios aparecen junto a cada trámite. Como referencia: Nota Simple Informativa desde 35 €, Nota de Localización desde 25 €, Nota Simple Mercantil desde 25 € e Informe de Tráfico por matrícula desde 25 €. El pago se realiza de forma segura con Stripe.');
+  addChatMessage('bot', 'Los precios aparecen junto a cada trámite. Como referencia: Nota Simple Informativa desde 25 €, Nota de Localización desde 25 €, Nota Simple Mercantil desde 25 € e Informe de Tráfico por matrícula desde 25 €. El pago se realiza de forma segura con Stripe.');
   renderGuidedOptions([
     { label: 'Ver trámites', action: resetGuidedChat },
     { label: 'Hablar con Tramitium', action: showGuidedContact }

@@ -3,6 +3,7 @@
   'prop-inscripcion': { tag: 'Registro de la Propiedad', title: 'Inscripci?n de Escritura', price: 150 },
   'prop-certificacion': { tag: 'Registro de la Propiedad', title: 'Certificaci?n Registral', price: 95 },
   'prop-cancelacion': { tag: 'Registro de la Propiedad', title: 'Cancelaci?n de Carga', price: 230 },
+  'prop-anotacion': { tag: 'Registro de la Propiedad', title: 'Anotaci?n Preventiva', price: 135 },
   'prop-localizacion': { tag: 'Registro de la Propiedad', title: 'Nota de Localizaci?n de Propiedades', price: 25 },
   'civil-nacimiento': { tag: 'Registro Civil', title: 'Certificado de Nacimiento', price: 35 },
   'civil-matrimonio': { tag: 'Registro Civil', title: 'Certificado de Matrimonio', price: 35 },
@@ -15,8 +16,9 @@
   'merc-certificacion': { tag: 'Registro Mercantil', title: 'Certificaci?n Registral Mercantil', price: 80 },
   'merc-inscripcion': { tag: 'Registro Mercantil', title: 'Inscripci?n de Escritura Mercantil', price: 205 },
   'merc-nota': { tag: 'Registro Mercantil', title: 'Nota Simple Mercantil', price: 25 },
-  'trafico-informe-matricula': { tag: 'DGT', title: 'Informe DGT de un Vehiculo por Matricula', price: 25 },
-  'contrato-privado': { tag: 'Contratos Privados', title: 'Solicitud de Elaboracion de Contrato Privado', price: 40, unitPrice: 40 }
+  'informe-empresarial': { tag: 'Otros servicios', title: 'Informe Empresarial Integral', price: 15 },
+  'trafico-informe-matricula': { tag: 'Tr?fico', title: 'Informe de Tr?fico de un Veh?culo por Matr?cula', price: 25 },
+  'contrato-privado': { tag: 'Otros servicios', title: 'Elaboraci?n de Contrato Privado', price: 40 }
 };
 
 function jsonResponse(statusCode, payload) {
@@ -56,19 +58,6 @@ function formDataToText(formData) {
     .map(([key, value]) => `${key}: ${String(value || '').trim()}`)
     .join('\n')
     .slice(0, 7000);
-}
-
-function selectedContractCount(formData) {
-  const value = String((formData && formData.tipo_contrato) || '').trim();
-  if (!value) return 0;
-  return value.split(';').map(item => item.trim()).filter(Boolean).length;
-}
-
-function getServicePrice(serviceKey, service, formData) {
-  if (serviceKey === 'contrato-privado') {
-    return Math.max(1, selectedContractCount(formData)) * service.unitPrice;
-  }
-  return service.price;
 }
 
 async function sendEmailJS(templateParams) {
@@ -111,7 +100,6 @@ module.exports = {
   isEmail,
   cleanText,
   formDataToText,
-  getServicePrice,
   sendEmailJS
 };
 
