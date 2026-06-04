@@ -79,15 +79,27 @@ async function sendEmailJS(templateParams) {
 
   if (privateKey) body.accessToken = privateKey;
 
-  const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-
-  if (!response.ok) {
+  const postEmail = async (payload) => {
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
     const text = await response.text().catch(() => '');
-    throw new Error(`EmailJS ha devuelto ${response.status}: ${text}`);
+    return { ok: response.ok, status: response.status, text };
+  };
+
+  let result = await postEmail(body);
+
+  if (!result.ok && privateKey && [400, 401, 403].includes(result.status)) {
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    const fallbackBody = { ...body };
+    delete fallbackBody.accessToken;
+    result = await postEmail(fallbackBody);
+  }
+
+  if (!result.ok) {
+    throw new Error(`EmailJS ha devuelto ${result.status}: ${result.text}`);
   }
 
   return true;
