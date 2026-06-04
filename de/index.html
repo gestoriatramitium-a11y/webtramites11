@@ -1,0 +1,1268 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tramitium | Online-Verwaltungsservice für einfache Behördengänge</title>
+<meta name="description" content="Tramitium unterstützt Sie dabei, Verwaltungsverfahren online einfach, bequem und ohne unnötige Wege zu erledigen.">
+<!-- i18n-seo-start -->
+<link rel="canonical" href="https://www.tramitium.es/de/">
+<link rel="alternate" hreflang="es" href="https://www.tramitium.es/">
+<link rel="alternate" hreflang="en" href="https://www.tramitium.es/en/">
+<link rel="alternate" hreflang="de" href="https://www.tramitium.es/de/">
+<link rel="alternate" hreflang="x-default" href="https://www.tramitium.es/">
+<!-- i18n-seo-end -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+  :root {
+    --navy: #0f1e3c;
+    --navy-mid: #1a2f57;
+    --gold: #c9a84c;
+    --gold-light: #e2c97e;
+    --gold-pale: #f5ead4;
+    --cream: #faf7f0;
+    --white: #ffffff;
+    --text-dark: #1a1a2e;
+    --text-mid: #4a5568;
+    --text-light: #8898aa;
+    --border: #e2d9c8;
+    --shadow: 0 4px 32px rgba(15,30,60,0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,30,60,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 72px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; z-index: 101; }
+  .nav-logo-mark {
+    width: 36px; height: 36px; border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; color: var(--gold);
+    font-size: 16px; font-weight: 700; letter-spacing: 1px;
+  }
+  .nav-logo-text { font-family: 'Playfair Display', serif; color: var(--white); font-size: 20px; font-weight: 600; letter-spacing: 1px; }
+  .nav-logo-text span { color: var(--gold); }
+  .nav-links { display: flex; gap: 36px; list-style: none; align-items: center; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    font-size: 13px; font-weight: 400; letter-spacing: 1.5px;
+    text-transform: uppercase; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta { border: 1px solid var(--gold); color: var(--gold) !important; padding: 8px 22px; transition: all 0.3s !important; }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--navy) !important; }
+  .language-switcher { display: flex; align-items: center; gap: 3px; border: 1px solid rgba(201,168,76,0.32); padding: 3px; }
+  .language-switcher a { padding: 4px 7px; font-size: 11px; line-height: 1; letter-spacing: 1.2px; color: rgba(255,255,255,0.72); }
+  .language-switcher a:hover { color: var(--gold); }
+  .language-switcher a.active { background: var(--gold); color: var(--navy) !important; }
+  .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 101; background: transparent; border: 0; }
+  .menu-toggle span { width: 25px; height: 2px; background: var(--gold); transition: all 0.3s; }
+
+  .hero { min-height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; background: var(--navy); }
+  .hero-bg { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1800&q=85'); background-size: cover; background-position: center 30%; opacity: 0.18; }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(105deg, rgba(15,30,60,0.98) 45%, rgba(15,30,60,0.7) 100%); }
+  .hero-content { position: relative; z-index: 2; padding: 0 5%; max-width: 700px; animation: fadeUp 1s ease both; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+  .hero-eyebrow::before { content: ''; display: block; width: 40px; height: 1px; background: var(--gold); }
+  .hero h1 { font-family: 'Playfair Display', serif; color: var(--white); font-size: clamp(36px, 5.5vw, 72px); font-weight: 500; line-height: 1.15; margin-bottom: 24px; }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-desc { font-family: 'Cormorant Garamond', serif; color: rgba(255,255,255,0.7); font-size: clamp(18px, 2vw, 20px); line-height: 1.7; margin-bottom: 48px; max-width: 540px; }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary, .btn-pay {
+    background: var(--gold); color: var(--navy); padding: 15px 36px;
+    font-size: 13px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
+    border: none; cursor: pointer; text-decoration: none; display: inline-flex;
+    align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;
+  }
+  .btn-pay { width: 100%; margin-top: 24px; }
+  .btn-primary:hover:not(:disabled), .btn-pay:hover:not(:disabled) { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.35); }
+  .btn-primary:disabled, .btn-pay:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-outline { background: transparent; color: var(--white); padding: 15px 36px; font-size: 13px; font-weight: 400; letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.35); cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s; }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-stats { position: absolute; bottom: 60px; right: 5%; display: flex; gap: 48px; animation: fadeUp 1s 0.3s ease both; }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 38px); font-weight: 600; color: var(--gold); display: block; }
+  .hero-stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+
+  .trust-bar { background: var(--gold); padding: 18px 5%; display: flex; align-items: center; justify-content: center; gap: clamp(20px, 4vw, 60px); flex-wrap: wrap; }
+  .trust-item { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); }
+  .section-header { text-align: center; margin-bottom: clamp(40px, 5vw, 64px); }
+  .section-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 500; color: var(--navy); line-height: 1.2; margin-bottom: 20px; }
+  .section-subtitle { font-family: 'Cormorant Garamond', serif; font-size: clamp(16px, 2vw, 19px); color: var(--text-mid); max-width: 560px; margin: 0 auto; }
+  .section-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); margin: 24px auto 0; }
+
+  .intro { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 5vw, 80px); align-items: center; padding: clamp(60px, 10vw, 120px) 5%; max-width: 1320px; margin: 0 auto; }
+  .intro-img-wrap { position: relative; }
+  .intro-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+  .intro-img-deco { position: absolute; top: -20px; right: -20px; width: 80%; height: 80%; border: 2px solid var(--gold); z-index: -1; }
+  .intro-badge { position: absolute; bottom: 32px; left: -32px; background: var(--navy); color: var(--white); padding: 24px 28px; min-width: 180px; }
+  .intro-badge-num { font-family: 'Playfair Display', serif; font-size: 42px; color: var(--gold); display: block; line-height: 1; }
+  .intro-badge-text { font-size: 12px; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-top: 6px; line-height: 1.4; }
+  .intro-text .section-header { text-align: left; }
+  .intro-text .section-divider { margin-left: 0; }
+  .intro-text p { font-family: 'Cormorant Garamond', serif; font-size: clamp(16px, 2vw, 18px); color: var(--text-mid); margin-bottom: 20px; line-height: 1.8; }
+  .intro-features { margin-top: 36px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .intro-feature { display: flex; align-items: flex-start; gap: 12px; }
+  .intro-feature-icon { width: 32px; height: 32px; flex-shrink: 0; background: var(--gold-pale); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 14px; }
+  .intro-feature-text { font-size: 13px; font-weight: 400; color: var(--text-mid); letter-spacing: 0.3px; }
+
+  .photo-row { display: grid; grid-template-columns: 1.2fr 0.8fr 1fr; height: clamp(200px, 30vw, 420px); gap: 4px; }
+  .photo-row img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85) saturate(0.8); transition: filter 0.4s; }
+  .photo-row img:hover { filter: brightness(0.95) saturate(1); }
+
+  .services-section { background: var(--navy); padding: clamp(60px, 10vw, 120px) 5%; position: relative; overflow: hidden; }
+  .services-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .services-bg-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Playfair Display', serif; font-size: clamp(100px, 20vw, 280px); font-weight: 700; color: rgba(255,255,255,0.015); white-space: nowrap; pointer-events: none; user-select: none; }
+  .services-section .section-title { color: var(--white); }
+  .services-section .section-subtitle { color: rgba(255,255,255,0.55); }
+  .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; max-width: 1480px; margin: 0 auto; }
+  .registry-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.15); padding: clamp(30px, 4vw, 48px) clamp(20px, 3vw, 40px); transition: all 0.4s; position: relative; overflow: hidden; }
+  .registry-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+  .registry-card:hover { background: rgba(255,255,255,0.07); transform: translateY(-4px); }
+  .registry-card:hover::after { transform: scaleX(1); }
+  .registry-number { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 700; color: rgba(201,168,76,0.12); position: absolute; top: 20px; right: 28px; line-height: 1; transition: color 0.4s; }
+  .registry-card:hover .registry-number { color: rgba(201,168,76,0.2); }
+  .registry-icon { width: 52px; height: 52px; border: 1px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; color: var(--gold); margin-bottom: 28px; }
+  .registry-title { font-family: 'Playfair Display', serif; color: var(--white); font-size: 24px; font-weight: 500; margin-bottom: 8px; }
+  .registry-subtitle { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.8; margin-bottom: 20px; display: block; }
+  .registry-desc { font-family: 'Cormorant Garamond', serif; color: rgba(255,255,255,0.55); font-size: 16px; line-height: 1.7; margin-bottom: 32px; }
+  .services-list { list-style: none; margin-bottom: 12px; }
+  .services-list li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.2s; }
+  .services-list li:last-child { border-bottom: none; }
+  .services-list li:hover { color: var(--gold-light); padding-left: 6px; }
+  .services-list li::before { content: '→'; color: var(--gold); font-size: 12px; flex-shrink: 0; }
+  .service-price { font-size: 11px; letter-spacing: 1px; color: var(--gold); margin-left: auto; opacity: 0.7; white-space: nowrap; }
+
+  .process-section { padding: clamp(60px, 10vw, 120px) 5%; background: var(--cream); max-width: 1320px; margin: 0 auto; }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; position: relative; }
+  .process-steps::before { content: ''; position: absolute; top: 32px; left: 12.5%; right: 12.5%; height: 1px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); z-index: 0; }
+  .process-step { text-align: center; position: relative; z-index: 1; }
+  .process-step-num { width: 64px; height: 64px; background: var(--navy); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: var(--gold); }
+  .process-step-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--navy); margin-bottom: 10px; }
+  .process-step-text { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--text-mid); line-height: 1.6; }
+
+  .testimonials-section { padding: clamp(60px, 10vw, 120px) 5%; background: var(--gold-pale); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; max-width: 1320px; margin: 0 auto; }
+  .testimonial-card { background: var(--white); padding: clamp(24px, 4vw, 40px); border-left: 3px solid var(--gold); box-shadow: var(--shadow); }
+  .testimonial-quote { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--text-dark); line-height: 1.7; margin-bottom: 28px; }
+  .testimonial-author { display: flex; align-items: center; gap: 14px; }
+  .testimonial-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; }
+  .testimonial-name { font-weight: 500; font-size: 14px; color: var(--navy); }
+  .testimonial-role { font-size: 12px; color: var(--text-light); }
+  .stars { color: var(--gold); font-size: 13px; margin-bottom: 4px; }
+
+  .contact-section { padding: clamp(60px, 10vw, 120px) 5%; background: var(--navy); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 80px); align-items: start; position: relative; overflow: hidden; }
+  .contact-section::before { content: ''; position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1462206092226-f46025ffe607?auto=format&fit=crop&w=1200&q=60'); background-size: cover; background-position: center; opacity: 0.05; }
+  .contact-left { position: relative; z-index: 1; }
+  .contact-left .section-title { color: var(--white); }
+  .contact-left p { font-family: 'Cormorant Garamond', serif; color: rgba(255,255,255,0.6); font-size: 18px; line-height: 1.8; margin-bottom: 40px; }
+  .contact-info { list-style: none; }
+  .contact-info li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 14px; color: rgba(255,255,255,0.7); }
+  .contact-info .icon { width: 36px; height: 36px; background: rgba(201,168,76,0.15); display: flex; align-items: center; justify-content: center; color: var(--gold); flex-shrink: 0; }
+
+  footer { background: #070f1f; padding: 40px 5%; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(201,168,76,0.15); flex-wrap: wrap; gap: 20px; }
+  .footer-logo { font-family: 'Playfair Display', serif; color: var(--white); font-size: 18px; }
+  .footer-logo span { color: var(--gold); }
+  footer p { font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 0.5px; }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a { font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(7,15,31,0.85); backdrop-filter: blur(6px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--cream); max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; transform: translateY(30px) scale(0.97); transition: transform 0.35s; }
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+  .modal-header { background: var(--navy); padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 40px); position: sticky; top: 0; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+  .modal-header-left { flex: 1; }
+  .modal-service-tag { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; display: block; }
+  .modal-title { font-family: 'Playfair Display', serif; color: var(--white); font-size: clamp(18px, 3vw, 22px); }
+  .modal-close { background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); width: 36px; height: 36px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+  .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+  .modal-body { padding: clamp(20px, 4vw, 40px); }
+  .modal-info { background: var(--gold-pale); border-left: 3px solid var(--gold); padding: 16px 20px; margin-bottom: 32px; font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--text-mid); line-height: 1.6; }
+  .modal-long-info { font-family: 'Cormorant Garamond', serif; color: var(--text-mid); font-size: 16px; line-height: 1.65; margin: -12px 0 24px; }
+  .modal-benefits { margin: -6px 0 26px; padding-left: 18px; color: var(--text-mid); font-size: 14px; line-height: 1.6; }
+  .modal-benefits li { margin-bottom: 7px; }
+  .modal-action-row { display: flex; gap: 10px; flex-wrap: wrap; margin: -8px 0 28px; }
+  .modal-sample-link { border: 1px solid var(--gold); color: var(--navy); background: var(--white); text-decoration: none; padding: 10px 14px; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 500; transition: all 0.2s; }
+  .modal-sample-link:hover { background: var(--gold-pale); }
+  .form-section-title { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--navy); margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 16px; width: 100%; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 6px; font-weight: 500; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; background: var(--white); border: 1px solid var(--border); font-family: 'Jost', sans-serif; font-size: 14px; color: var(--text-dark); transition: border-color 0.2s; outline: none; -webkit-appearance: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .StripeElement { width: 100%; padding: 12px 16px; background: var(--white); border: 1px solid var(--border); transition: box-shadow 0.2s, border-color 0.2s; }
+  .StripeElement--focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+  .form-price-box { background: var(--navy); padding: 20px 24px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+  .form-price-label { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 1px; text-transform: uppercase; }
+  .form-price-amount { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--gold); white-space: nowrap; }
+  .form-price-note { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+  .payment-header { text-align: center; margin-bottom: 32px; }
+  .payment-icon { width: 60px; height: 60px; background: var(--gold-pale); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 24px; }
+  .payment-title { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--navy); }
+  .payment-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--text-mid); margin-top: 6px; }
+  #card-errors, .form-error { color: #e53e3e; font-size: 13px; margin-top: 8px; text-align: center; }
+  .secure-badge { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-light); margin-top: 12px; justify-content: center; }
+  .success-screen { text-align: center; padding: 20px 0; }
+  .success-icon { width: 80px; height: 80px; background: #f0faf4; border: 3px solid #38a169; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 32px; color: #38a169; }
+  .warning-icon { background: #fffaf0; border-color: #dd6b20; color: #dd6b20; }
+  .success-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--navy); margin-bottom: 12px; }
+  .success-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--text-mid); line-height: 1.7; max-width: 430px; margin: 0 auto 32px; }
+  .success-ref { display: inline-block; background: var(--gold-pale); border: 1px solid var(--gold); padding: 10px 24px; font-size: 13px; color: var(--navy); letter-spacing: 2px; font-weight: 500; margin-bottom: 24px; }
+  .small-link { text-align:center; font-size:11px; color:var(--text-light); margin-top:12px; cursor:pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .chat-widget { position: fixed; right: clamp(16px, 3vw, 28px); bottom: clamp(16px, 3vw, 28px); z-index: 900; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; font-family: 'Jost', sans-serif; }
+  .chat-panel { width: min(380px, calc(100vw - 32px)); height: min(600px, calc(100vh - 112px)); background: var(--cream); border: 1px solid rgba(201,168,76,0.35); box-shadow: 0 18px 54px rgba(7,15,31,0.28); display: none; flex-direction: column; overflow: hidden; }
+  .chat-widget.open .chat-panel { display: flex; animation: chatEnter 0.25s ease both; }
+  .chat-header { background: var(--navy); padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border-bottom: 1px solid rgba(201,168,76,0.25); }
+  .chat-header-title { font-family: 'Playfair Display', serif; color: var(--white); font-size: 18px; line-height: 1.2; }
+  .chat-header-subtitle { color: rgba(255,255,255,0.58); font-size: 12px; margin-top: 3px; line-height: 1.4; }
+  .chat-close { width: 34px; height: 34px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.22); background: transparent; color: rgba(255,255,255,0.72); cursor: pointer; font-size: 16px; transition: all 0.2s; }
+  .chat-close:hover { border-color: var(--gold); color: var(--gold); }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 12px; background: linear-gradient(180deg, var(--cream) 0%, #fffdf8 100%); }
+  .chat-message { max-width: 88%; padding: 12px 14px; font-size: 14px; line-height: 1.55; box-shadow: 0 6px 18px rgba(15,30,60,0.07); }
+  .chat-message.bot { align-self: flex-start; background: var(--white); border-left: 3px solid var(--gold); color: var(--text-dark); }
+  .chat-message.user { align-self: flex-end; background: var(--navy); color: var(--white); }
+  .chat-quick-actions { padding: 0 18px 16px; display: flex; gap: 8px; flex-wrap: wrap; background: #fffdf8; max-height: 190px; overflow-y: auto; }
+  .chat-chip { border: 1px solid rgba(201,168,76,0.45); background: var(--white); color: var(--navy); padding: 8px 10px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+  .chat-chip:hover { background: var(--gold-pale); border-color: var(--gold); }
+  .chat-chip.primary { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 500; }
+  .chat-chip.muted { color: var(--text-mid); }
+  .chat-form { display: none; gap: 8px; padding: 14px; border-top: 1px solid var(--border); background: var(--white); }
+  .chat-input { flex: 1; min-width: 0; border: 1px solid var(--border); padding: 12px 13px; font-family: 'Jost', sans-serif; font-size: 14px; color: var(--text-dark); outline: none; }
+  .chat-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+  .chat-send { border: none; background: var(--gold); color: var(--navy); width: 46px; flex-shrink: 0; cursor: pointer; font-size: 18px; transition: all 0.2s; }
+  .chat-send:hover { background: var(--gold-light); }
+  .chat-launcher { border: none; background: var(--gold); color: var(--navy); min-width: 190px; min-height: 54px; padding: 0 22px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer; box-shadow: 0 12px 34px rgba(7,15,31,0.28); transition: all 0.25s; }
+  .chat-launcher:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .chat-launcher-icon { width: 10px; height: 10px; border-radius: 50%; background: var(--navy); box-shadow: 0 0 0 4px rgba(15,30,60,0.12); flex-shrink: 0; }
+  @keyframes chatEnter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 1; transform: none; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); }
+  @media (max-width: 1024px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .intro { grid-template-columns: 1fr; gap: 48px; }
+    .intro-img-wrap { max-width: 500px; margin: 0 auto; }
+    .intro-badge { left: -10px; bottom: -10px; }
+    .contact-section { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .process-steps::before { display: none; }
+    .photo-row { grid-template-columns: 1fr 1fr; height: auto; }
+    .photo-row img { min-height: 220px; }
+    .photo-row img:last-child { display: none; }
+  }
+  @media (max-width: 768px) {
+    .menu-toggle { display: flex; }
+    .nav-links { position: absolute; top: 72px; left: 0; right: 0; background: rgba(15,30,60,0.98); flex-direction: column; padding: 30px 5%; gap: 24px; border-bottom: 1px solid rgba(201,168,76,0.25); clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease-in-out; }
+    .nav-links.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    .hero-stats { position: static; padding: 40px 5% 0; gap: 28px; justify-content: center; }
+    .hero { min-height: auto; padding: 140px 0 60px; }
+    .form-row { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: 1fr; }
+    .intro-badge { position: relative; bottom: auto; left: auto; margin-top: -30px; margin-left: 20px; z-index: 2; width: max-content; }
+    .chat-widget { right: 12px; bottom: 12px; left: 12px; align-items: stretch; }
+    .chat-panel { width: 100%; height: min(560px, calc(100vh - 96px)); }
+    .chat-launcher { width: 100%; min-width: 0; }
+    .chat-message { max-width: 92%; }
+  }
+
+  .blog-page { background: var(--cream); padding-top: 72px; }
+  .blog-hero { background: var(--navy); padding: clamp(70px, 9vw, 118px) 5% clamp(48px, 7vw, 84px); position: relative; overflow: hidden; }
+  .blog-hero::before { content: 'GUIAS'; position: absolute; right: 4%; bottom: -48px; font-family: 'Playfair Display', serif; font-size: clamp(92px, 18vw, 230px); color: rgba(255,255,255,0.035); font-weight: 700; }
+  .blog-hero-inner { position: relative; z-index: 1; max-width: 900px; }
+  .blog-hero .section-title { color: var(--white); max-width: 780px; }
+  .blog-hero .section-subtitle { color: rgba(255,255,255,0.68); margin: 0; max-width: 740px; }
+  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1320px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 5%; }
+  .blog-card { background: var(--white); border-left: 3px solid var(--gold); box-shadow: var(--shadow); padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; gap: 18px; }
+  .blog-card h2 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: clamp(22px, 2.4vw, 30px); line-height: 1.2; }
+  .blog-card p, .blog-card li { color: var(--text-mid); font-family: 'Cormorant Garamond', serif; font-size: 17px; line-height: 1.7; }
+  .blog-card ul { padding-left: 18px; display: grid; gap: 10px; }
+  .blog-card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
+  .blog-card-actions .btn-primary, .blog-card-actions .btn-outline { padding: 12px 18px; font-size: 11px; }
+  .blog-card-actions .btn-outline { color: var(--navy); border-color: rgba(15,30,60,0.28); }
+  .blog-card-actions .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  @media (max-width: 1024px) { .blog-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="#" class="nav-logo" aria-label="Tramitium Startseite">
+    <div class="nav-logo-mark">T</div><span class="nav-logo-text">Tramit<span>ium</span></span>
+  </a>
+  <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menü öffnen"><span></span><span></span><span></span></button>
+  <ul class="nav-links">
+    <li><a href="#dienstleistungen" onclick="closeMenu()">Dienstleistungen</a></li>
+    <li><a href="#ablauf" onclick="closeMenu()">So funktioniert es</a></li>
+    <li><a href="#ueber-uns" onclick="closeMenu()">Über uns</a></li>
+    <li><a href="/de/blog/" onclick="closeMenu()">Blog</a></li>
+    <li class="language-switcher" aria-label="Sprachauswahl">
+      <a href="/" hreflang="es" lang="es" class="">ES</a>
+      <a href="/en/" hreflang="en" lang="en" class="">EN</a>
+      <a href="/de/" hreflang="de" lang="de" class="active">DE</a>
+    </li>
+    <li><a href="#kontakt" class="nav-cta" onclick="closeMenu()">Kontakt</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div><div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Professionelle Online-Betreuung · Seit 2008</p>
+    <h1>Ihre Verfahren,<br><em>in erfahrenen Händen</em></h1>
+    <p class="hero-desc">Vertretung und Bearbeitung bei Grundbuch-, Standes- und Handelsregistern. Effizienz, Diskretion und Ergebnisse.</p>
+    <div class="hero-btns"><a href="#dienstleistungen" class="btn-primary">Dienstleistungen ansehen</a><a href="#ablauf" class="btn-outline">So funktioniert es</a></div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-num">+4.800</span><span class="hero-stat-label">Verfahren</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">98%</span><span class="hero-stat-label">Zufriedenheit</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">20+</span><span class="hero-stat-label">Jahre Erf.</span></div>
+  </div>
+</section>
+
+<div class="trust-bar">
+  <div class="trust-item">✓ 100% Online-Abwicklung</div>
+  <div class="trust-item">✓ Sichere Stripe-Zahlung</div>
+  <div class="trust-item">✓ Antwort innerhalb von 24h</div>
+  <div class="trust-item">✓ Persönliche Betreuung</div>
+</div>
+
+<section id="ueber-uns" style="background: var(--cream);">
+  <div class="intro">
+    <div class="intro-img-wrap reveal">
+      <div class="intro-img-deco"></div>
+      <img class="intro-img" src="/assets/img/ceo.jpg" loading="lazy" alt="CEO von Tramitium">
+      <div class="intro-badge"><span class="intro-badge-num">20+</span><div class="intro-badge-text">Jahre Berufserfahrung</div></div>
+    </div>
+    <div class="intro-text reveal">
+      <div class="section-header"><span class="section-eyebrow">Über uns</span><h2 class="section-title">Fachkundige Leitung<br>bei Registerverfahren</h2><div class="section-divider"></div></div>
+      <p>Tramitium wird von seinem CEO geleitet, einem Wirtschaftsexperten mit mehr als 20 Jahren Erfahrung, und verfolgt ein klares Ziel: komplexe Verfahren in präzise, schnelle und sichere Abläufe für jeden Kunden zu verwandeln.</p>
+      <p>Wir verbinden fachliches Urteilsvermögen, persönliche Betreuung und technisches Wissen, damit jede Akte korrekt eingereicht, Fristen verkürzt und Probleme vermieden werden.</p>
+      <div class="intro-features">
+        <div class="intro-feature"><div class="intro-feature-icon">✓</div><span class="intro-feature-text">Qualifizierte und zertifizierte Fachleute</span></div>
+        <div class="intro-feature"><div class="intro-feature-icon">✓</div><span class="intro-feature-text">Zugang zu offiziellen Online-Portalen</span></div>
+        <div class="intro-feature"><div class="intro-feature-icon">✓</div><span class="intro-feature-text">Nachverfolgung in Echtzeit</span></div>
+        <div class="intro-feature"><div class="intro-feature-icon">✓</div><span class="intro-feature-text">Garantierte Vertraulichkeit</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="photo-row">
+  <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80" loading="lazy" alt="Registerunterlagen">
+  <img src="https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=600&q=80" loading="lazy" alt="Professionelles Büro">
+  <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=80" loading="lazy" alt="Professioneller Berater">
+</div>
+
+<section class="services-section" id="dienstleistungen">
+  <div class="services-bg-text">REGISTROS</div>
+  <div class="section-header reveal" style="position:relative;z-index:1;">
+    <span class="section-eyebrow">Unsere Dienstleistungen</span><h2 class="section-title">Register, die wir betreuen</h2><div class="section-divider"></div>
+    <p class="section-subtitle">Klicken Sie auf ein Verfahren, um den Service anzufragen und das Formular auszufüllen</p>
+  </div>
+  <div class="services-grid" style="position:relative;z-index:1;">
+    <div class="registry-card reveal">
+      <span class="registry-number">01</span><div class="registry-icon">⌂</div><span class="registry-subtitle">Register 01</span><h3 class="registry-title">Grundbuchamt</h3>
+      <p class="registry-desc">Eintragungen, Auszüge und Bescheinigungen zu Immobilien und dinglichen Rechten.</p>
+      <ul class="services-list">
+        <li onclick="openModal('prop-nota-simple')">Einfacher Grundbuchauszug <span class="service-price">ab 25€</span></li>
+        <li onclick="openModal('prop-inscripcion')">Eintragung einer Urkunde <span class="service-price">ab 150€</span></li>
+        <li onclick="openModal('prop-certificacion')">Grundbuchbescheinigung <span class="service-price">ab 95€</span></li>
+        <li onclick="openModal('prop-cancelacion')">Löschung einer Belastung <span class="service-price">ab 230€</span></li>
+        <li onclick="openModal('prop-localizacion')">Eigentumslokalisierung <span class="service-price">ab 25€</span></li>
+      </ul>
+    </div>
+    <div class="registry-card reveal">
+      <span class="registry-number">02</span><div class="registry-icon">☷</div><span class="registry-subtitle">Register 02</span><h3 class="registry-title">Standesamt</h3>
+      <p class="registry-desc">Urkunden und Verfahren zum Personenstand: Geburten, Eheschließungen, Todesfälle und mehr.</p>
+      <ul class="services-list">
+        <li onclick="openModal('civil-nacimiento')">Geburtsurkunde <span class="service-price">ab 30€</span></li>
+        <li onclick="openModal('civil-matrimonio')">Heiratsurkunde <span class="service-price">ab 30€</span></li>
+        <li onclick="openModal('civil-defuncion')">Sterbeurkunde <span class="service-price">ab 30€</span></li>
+        <li onclick="openModal('civil-fe-vida')">Lebens- und Familienstandsbescheinigung <span class="service-price">ab 45€</span></li>
+        <li onclick="openModal('civil-cambio-nombre')">Namensänderung <span class="service-price">ab 150€</span></li>
+      </ul>
+    </div>
+    <div class="registry-card reveal">
+      <span class="registry-number">03</span><div class="registry-icon">▣</div><span class="registry-subtitle">Register 03</span><h3 class="registry-title">Handelsregister</h3>
+      <p class="registry-desc">Gründung und Verwaltung von Gesellschaften, Jahresabschlüsse, Bescheinigungen und Handelsregisterauszüge.</p>
+      <ul class="services-list">
+        <li onclick="openModal('merc-denominacion')">Firmenbezeichnung <span class="service-price">ab 60€</span></li>
+        <li onclick="openModal('merc-deposito')">Hinterlegung des Jahresabschlusses <span class="service-price">ab 150€</span></li>
+        <li onclick="openModal('merc-certificacion')">Grundbuchbescheinigung <span class="service-price">ab 80€</span></li>
+        <li onclick="openModal('merc-inscripcion')">Eintragung einer Urkunde <span class="service-price">ab 205€</span></li>
+        <li onclick="openModal('merc-nota')">Einfacher Handelsregisterauszug <span class="service-price">ab 25€</span></li>
+      </ul>
+    </div>
+    <div class="registry-card reveal">
+      <span class="registry-number">04</span><div class="registry-icon">§</div><span class="registry-subtitle">Service 04</span><h3 class="registry-title">Weitere Dienstleistungen</h3>
+      <p class="registry-desc">Unternehmens- und Fahrzeugberichte sowie private Verträge, angepasst an jedes Geschäft.</p>
+      <ul class="services-list">
+        <li onclick="openModal('informe-empresarial')">Umfassender Unternehmensbericht <span class="service-price">ab 15€</span></li>
+        <li onclick="openModal('trafico-informe-matricula')">DGT-Bericht nach Kennzeichen <span class="service-price">ab 25€</span></li>
+        <li onclick="openModal('contrato-privado')">Erstellung eines privaten Vertrags <span class="service-price">ab 40€</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="process-section" id="ablauf">
+  <div class="section-header reveal"><span class="section-eyebrow">Der Ablauf</span><h2 class="section-title">So einfach ist es</h2><div class="section-divider"></div><p class="section-subtitle">Vier Schritte, damit Ihr Verfahren korrekt bearbeitet wird</p></div>
+  <div class="process-steps">
+    <div class="process-step reveal"><div class="process-step-num">01</div><h3 class="process-step-title">Verfahren auswählen</h3><p class="process-step-text">Wählen Sie den gewünschten Service aus unserem Katalog für Registerverfahren.</p></div>
+    <div class="process-step reveal"><div class="process-step-num">02</div><h3 class="process-step-title">Formular ausfüllen</h3><p class="process-step-text">Geben Sie die erforderlichen Daten ein, um die Akte schnell und sicher zu starten.</p></div>
+    <div class="process-step reveal"><div class="process-step-num">03</div><h3 class="process-step-title">Zahlung durchführen</h3><p class="process-step-text">Sichere Zahlung mit Stripe. Ihre Kartendaten laufen nicht über unsere Server.</p></div>
+    <div class="process-step reveal"><div class="process-step-num">04</div><h3 class="process-step-title">Wir kümmern uns darum</h3><p class="process-step-text">Wir erhalten Ihre Anfrage und starten die Bearbeitung über das zuständige Online-Portal innerhalb von 24 Stunden.</p></div>
+  </div>
+</section>
+
+<section class="testimonials-section">
+  <div class="section-header reveal"><span class="section-eyebrow">Kundenstimmen</span><h2 class="section-title">Was unsere Kunden sagen</h2><div class="section-divider"></div></div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-quote">"Die Eintragung unserer Urkunde wurde in Rekordzeit erledigt. Alles war korrekt dokumentiert und fehlerfrei."</p><div class="testimonial-author"><div class="testimonial-avatar">MR</div><div><div class="testimonial-name">Manuel Rodríguez</div><div class="testimonial-role">Privatkunde · Madrid</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-quote">"Ich benötigte dringend mehrere standesamtliche Urkunden für einen notariellen Vorgang. Ausgezeichneter Service."</p><div class="testimonial-author"><div class="testimonial-avatar">SG</div><div><div class="testimonial-name">Sofía García</div><div class="testimonial-role">Rechtsanwältin · Barcelona</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-quote">"Wir nutzen Tramitium seit zwei Jahren für die Einreichung unserer Jahresabschlüsse. Absolute Professionalität."</p><div class="testimonial-author"><div class="testimonial-avatar">AL</div><div><div class="testimonial-name">Alberto López</div><div class="testimonial-role">Finanzleiter · Valencia</div></div></div></div>
+  </div>
+</section>
+
+<section class="contact-section" id="kontakt">
+  <div class="contact-left">
+    <span class="section-eyebrow">Kontakt</span><h2 class="section-title">Haben Sie eine Frage?</h2><div class="section-divider" style="margin-left:0; margin-bottom:28px;"></div>
+    <p>Unser Team beantwortet Ihre Fragen, bevor Sie ein Verfahren starten. Schreiben Sie uns unverbindlich.</p>
+    <ul class="contact-info">
+      <li><div class="icon">✉</div>gestoriatramitium@gmail.com</li>
+      <li><div class="icon">◷</div>Montag bis Freitag · 9:00 — 18:00</li>
+      <li><div class="icon">✓</div>100% Online-Abwicklung · Ganz Spanien</li>
+    </ul>
+  </div>
+  <div style="position:relative;z-index:1;">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.2);padding:clamp(24px, 5vw, 48px) clamp(20px, 4vw, 44px);">
+      <p style="font-family:'Playfair Display',serif;color:var(--white);font-size:20px;margin-bottom:8px;">Kostenlose Anfrage</p>
+      <p style="font-family:'Cormorant Garamond',serif;color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:28px;">Wir antworten innerhalb von 24 Stunden</p>
+      <div class="form-group"><label for="contact_name">Vollständiger Name</label><input type="text" id="contact_name" placeholder="Ihr Name"></div>
+      <div class="form-group"><label for="contact_email">E-Mail-Adresse</label><input type="email" id="contact_email" placeholder="email@beispiel.de"></div>
+      <div class="form-group"><label for="contact_msg">Nachricht</label><textarea id="contact_msg" placeholder="Beschreiben Sie Ihre Frage kurz..."></textarea></div>
+      <button class="btn-primary" id="contactBtn" style="width:100%;border:none;cursor:pointer;" onclick="sendContactEmail()">Anfrage senden</button>
+      <div id="contactFeedback" style="font-size:13px;margin-top:12px;color:var(--gold-light);text-align:center;"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Tramit<span>ium</span> · Professioneller Verwaltungsservice</div>
+  <p>© 2026 Tramitium. Alle Rechte vorbehalten.</p>
+  <div class="footer-links"><a href="/aviso-legal.html">Impressum</a><a href="/politica-privacidad.html">Datenschutzerklärung</a><a href="/cookies.html">Cookies</a></div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-header">
+      <div class="modal-header-left"><span class="modal-service-tag" id="modalTag"></span><h2 class="modal-title" id="modalTitle"></h2></div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Schließen">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="chat-widget" id="chatWidget">
+  <section class="chat-panel" aria-labelledby="chatTitle" aria-live="polite">
+    <div class="chat-header">
+      <div>
+        <h2 class="chat-header-title" id="chatTitle">Tramitium-Assistent</h2>
+        <p class="chat-header-subtitle">Kurzer Leitfaden zu Verfahren, Preisen und Unterlagen.</p>
+      </div>
+      <button class="chat-close" id="chatCloseBtn" type="button" aria-label="Chat schließen">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-quick-actions" id="chatQuickActions" aria-label="Opciones del asistente"></div>
+  </section>
+  <button class="chat-launcher" id="chatLauncherBtn" type="button" onclick="toggleChat()" aria-controls="chatWidget" aria-expanded="false">
+    <span class="chat-launcher-icon" aria-hidden="true"></span>
+    <span>Benötigen Sie Hilfe?</span>
+  </button>
+</div>
+
+<script>
+// IMPORTANTE:
+// 1) Ponga aquí su clave PUBLICABLE de Stripe (pk_test_... primero; pk_live_... cuando esté probado).
+// 2) La clave SECRETA de Stripe (sk_...) va SOLO en variables de entorno de Netlify, nunca aquí.
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TX5SRFdzCmFLyN5q8GLZt9URTlXFI3J1b1dxpDhNKVH2uy4mewObjYUKFUuCZv4ggUBtWuyTHJI1QRe4KB0tT8h00KOplFvux';
+const API_BASE = '/.netlify/functions';
+const ADMIN_EMAIL = 'gestoriatramitium@gmail.com';
+
+let stripe = null;
+let elements = null;
+let cardElement = null;
+let currentService = null;
+let lastPaymentIntentId = null;
+
+function ensureStripe() {
+  if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY.includes('REEMPLAZA')) {
+    throw new Error('Falta configurar STRIPE_PUBLISHABLE_KEY en index.html. Use pk_test primero.');
+  }
+  if (!stripe) {
+    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    elements = stripe.elements();
+  }
+}
+
+﻿const AUTH_FIELDS = [
+  { section: 'Vertretung und Vollmacht' },
+  { id: 'rep_nombre', label: 'Vollständiger Name des Vertreters / Dritten', type: 'text', required: true, full: true },
+  { id: 'rep_dni', label: 'DNI / NIE des Vertreters / Dritten', type: 'text', required: true },
+  { id: 'autorizacion', label: 'Unterzeichnete Vollmacht oder Genehmigung', type: 'file', accept: '.pdf,.jpg,.jpeg,.png', required: true, full: true }
+];
+
+function withAuthorization(fields) { return [...fields, ...AUTH_FIELDS]; }
+
+const SERVICES = {
+  'prop-nota-simple': { tag: 'Grundbuchamt', title: 'Einfacher Grundbuchauszug', price: 25, info: 'Der Grundbuchauszug informiert über Eigentum und Belastungen einer eingetragenen Immobilie. Er wird über das zuständige Grundbuchamt bearbeitet.', fields: [ { id: 'sol_nombre', label: 'Name des ursprünglichen Antragstellers', type: 'text', placeholder: 'Vollständiger Name', required: true }, { id: 'sol_dni', label: 'DNI / NIE des ursprünglichen Antragstellers', type: 'text', placeholder: 'XXXXXXXXX', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', placeholder: 'email@beispiel.de', required: true }, { section: 'Angaben zur Immobilie' }, { id: 'finca_dir', label: 'Adresse der Immobilie', type: 'text', placeholder: 'Straße, Nummer, Etage...', required: true, full: true }, { id: 'finca_municipio', label: 'Gemeinde', type: 'text', placeholder: 'Gemeinde', required: true }, { id: 'finca_provincia', label: 'Provinz', type: 'text', placeholder: 'Provinz', required: true } ] },
+  'prop-inscripcion': { tag: 'Grundbuchamt', title: 'Eintragung einer Urkunde', price: 150, info: 'Online-Einreichung von Urkunden wie Kauf, Erbschaft, Schenkung und ähnlichen Immobilienakten.', fields: [ { id: 'sol_nombre', label: 'Name des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'sol_dni', label: 'DNI / NIE des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { section: 'Daten der Urkunde' }, { id: 'tipo_escritura', label: 'Art der Urkunde', type: 'select', options: ['Kaufvertrag', 'Erbschaft', 'Schenkung', 'Hypothek', 'Andere'], required: true }, { id: 'notario', label: 'Beurkundender Notar', type: 'text', required: true }, { id: 'fecha_esc', label: 'Datum der Urkunde', type: 'date', required: true } ] },
+  'prop-certificacion': { tag: 'Grundbuchamt', title: 'Grundbuchbescheinigung', price: 95, info: 'Offizielles Dokument mit rechtlicher Beweiskraft über den Zustand einer Immobilie.', fields: [ { id: 'sol_nombre', label: 'Name des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'finca_dir', label: 'Vollständige Adresse', type: 'text', required: true, full: true } ] },
+  'prop-cancelacion': { tag: 'Grundbuchamt', title: 'Löschung einer Belastung', price: 230, info: 'Bearbeitung der registerlichen Löschung von Hypotheken oder anderen Belastungen.', fields: [ { id: 'sol_nombre', label: 'Name des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'finca_dir', label: 'Adresse', type: 'text', required: true, full: true }, { id: 'banco', label: 'Bank / Einrichtung', type: 'text', required: true } ] },
+  'prop-localizacion': { tag: 'Grundbuchamt', title: 'Eigentumslokalisierung', price: 25, info: 'Lokalisierung von Immobilien, die auf den ursprünglichen Antragsteller eingetragen sind.', fields: [ { id: 'sol_nombre', label: 'Vollständiger Name des ursprünglichen Antragstellers', type: 'text', required: true, full: true }, { id: 'sol_dni', label: 'DNI / NIE des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'sol_contacto', label: 'Kontaktdaten des ursprünglichen Antragstellers', type: 'text', required: false, full: true } ] },
+  'civil-nacimiento': { tag: 'Standesamt', title: 'Geburtsurkunde', price: 35, info: 'Beschaffung der wörtlichen, auszugsweisen oder mehrsprachigen Urkunde.', fields: withAuthorization([ { id: 'sol_nombre', label: 'Name des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { section: 'Daten der eingetragenen Person' }, { id: 'inscrito_nombre', label: 'Eingetragener Name', type: 'text', required: true, full: true }, { id: 'fecha_nac', label: 'Geburtsdatum', type: 'date', required: true }, { id: 'lugar_nac', label: 'Geburtsort', type: 'text', required: true } ]) },
+  'civil-matrimonio': { tag: 'Standesamt', title: 'Heiratsurkunde', price: 35, info: 'Urkunde, die die Eintragung der Eheschließung nachweist.', fields: withAuthorization([ { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'conyuge1', label: 'Ehegatte 1', type: 'text', required: true }, { id: 'conyuge2', label: 'Ehegatte 2', type: 'text', required: true }, { id: 'fecha_mat', label: 'Datum der Eheschließung', type: 'date', required: true } ]) },
+  'civil-defuncion': { tag: 'Standesamt', title: 'Sterbeurkunde', price: 35, info: 'Dokument zum offiziellen Nachweis des Todesfalls.', fields: withAuthorization([ { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'fallecido', label: 'Name der verstorbenen Person', type: 'text', required: true, full: true }, { id: 'fecha_def', label: 'Sterbedatum', type: 'date', required: true } ]) },
+  'civil-fe-vida': { tag: 'Standesamt', title: 'Lebens- und Familienstandsbescheinigung', price: 60, info: 'Dokument zum Nachweis von Leben und Familienstand.', fields: withAuthorization([ { id: 'sol_nombre', label: 'Name des ursprünglichen Antragstellers', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'estado_civil', label: 'Familienstand', type: 'select', options: ['Ledig', 'Verheiratet', 'Verwitwet', 'Geschieden'], required: true } ]) },
+  'civil-cambio-nombre': { tag: 'Standesamt', title: 'Namensänderung', price: 385, info: 'Akte zur Änderung oder Anpassung des Namens.', fields: withAuthorization([ { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'nombre_actual', label: 'Aktueller Name', type: 'text', required: true, full: true }, { id: 'nombre_nuevo', label: 'Neuer Name', type: 'text', required: true, full: true } ]) },
+  'civil-ultimas-voluntades': { tag: 'Standesamt', title: 'Bescheinigung über letztwillige Verfügungen', price: 28, info: 'Bescheinigung über das Vorliegen eines Testaments oder letzter Willenserklärungen.', fields: [ { id: 'sol_nombre', label: 'Vollständiger Name des ursprünglichen Antragstellers', type: 'text', required: true, full: true }, { id: 'sol_dni', label: 'DNI / NIE des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'fecha_defuncion_interesado', label: 'Sterbedatum der betroffenen Person', type: 'date', required: false }, ...AUTH_FIELDS ] },
+  'merc-denominacion': { tag: 'Handelsregister', title: 'Firmenbezeichnung', price: 60, info: 'Reservierung de denominación social para constitución.', fields: withAuthorization([ { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'opcion1', label: 'Option 1', type: 'text', required: true, full: true }, { id: 'opcion2', label: 'Option 2', type: 'text', required: false, full: true } ]) },
+  'merc-deposito': { tag: 'Handelsregister', title: 'Hinterlegung des Jahresabschlusses', price: 150, info: 'Einreichung der verpflichtenden Jahresabschlüsse.', fields: withAuthorization([ { id: 'sociedad', label: 'Gesellschaft', type: 'text', required: true, full: true }, { id: 'cif', label: 'CIF', type: 'text', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'ejercicio', label: 'Geschäftsjahr', type: 'text', placeholder:'z. B. 2025', required: true } ]) },
+  'merc-certificacion': { tag: 'Handelsregister', title: 'Handelsregisterbescheinigung', price: 80, info: 'Offizielle Bescheinigung über die gesellschaftsrechtliche Situation.', fields: withAuthorization([ { id: 'sociedad', label: 'Gesellschaft', type: 'text', required: true, full: true }, { id: 'cif', label: 'CIF', type: 'text', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true } ]) },
+  'merc-inscripcion': { tag: 'Handelsregister', title: 'Eintragung einer Handelsurkunde', price: 205, info: 'Einreichung von Gründung, Satzungsänderungen und ähnlichen Gesellschaftsurkunden.', fields: withAuthorization([ { id: 'sociedad', label: 'Gesellschaft', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'tipo_escritura', label: 'Art', type: 'text', required: true } ]) },
+  'merc-nota': { tag: 'Handelsregister', title: 'Einfacher Handelsregisterauszug', price: 25, info: 'Grundlegende Registerinformationen über eine Gesellschaft.', fields: withAuthorization([ { id: 'sociedad', label: 'Gesellschaft', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true } ]) },
+  'informe-empresarial': { tag: 'Weitere Dienstleistungen', title: 'Umfassender Unternehmensbericht', price: 15, ctaLabel: 'Bericht anfragen', info: 'Erhalten Sie einen klaren und geordneten Bericht über ein Unternehmen, bevor Sie beauftragen, zusammenarbeiten oder eine Geschäftsentscheidung treffen.', longInfo: 'Der Service Umfassender Unternehmensbericht ist für Personen gedacht, die die allgemeine Situation eines Unternehmens vor einer Geschäftsbeziehung, Kreditgewährung, Lieferantenbeauftragung oder Zuverlässigkeitsprüfung kennen müssen. Der Kunde erhält ein herunterladbares PDF mit klar strukturierten Informationen, einschließlich Identifikationsdaten, Tätigkeit, wirtschaftlichen Angaben, Vorfällen, Verfahren, Organmitgliedern, Unternehmensverbindungen und einer orientierenden Risikobewertung.', benefits: ['Hilft, Geschäftsentscheidungen sicherer zu treffen.', 'Bündelt Informationen, die normalerweise verstreut sind, in einem einzigen Dokument.', 'Stellt die Daten klar und leicht verständlich dar.', 'Dient als Unterstützung vor Beauftragung, Finanzierung oder Zusammenarbeit mit einem Unternehmen.', 'Ermöglicht den Download eines Beispielberichts, um den gelieferten Dokumenttyp zu sehen.'], sampleUrl: '/informe_empresarial_ejemplo_tramitium.docx', fields: [ { id: 'sol_nombre', label: 'Vollständiger Name des ursprünglichen Antragstellers', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'sol_telefono', label: 'Telefonnummer', type: 'text', required: false }, { section: 'Zu prüfendes Unternehmen' }, { id: 'empresa_nombre', label: 'Name oder Firmenbezeichnung des Unternehmens', type: 'text', required: true, full: true }, { id: 'empresa_cif', label: 'CIF / NIF des Unternehmens', type: 'text', required: false }, { id: 'empresa_web', label: 'Website oder zusätzliche Identifikationsdaten', type: 'text', required: false, full: true }, { id: 'motivo_informe', label: 'Grund der Anfrage', type: 'select', options: ['Lieferanten beauftragen', 'Kredit gewähren', 'Geschäftliche Zusammenarbeit', 'Zuverlässigkeitsprüfung', 'Vor Vertragsabschluss', 'Sonstiges'], required: true, full: true }, { id: 'observaciones', label: 'Anmerkungen oder zusätzliche Daten', type: 'textarea', placeholder: 'Geben Sie alle Details an, die bei der Erstellung des Berichts helfen können...', required: false, full: true } ] },
+  'trafico-informe-matricula': { tag: 'DGT und Fahrzeuge', title: 'DGT-Fahrzeugbericht nach Kennzeichen', price: 25, info: 'Fahrzeugbericht auf Grundlage des Kennzeichens.', fields: [ { id: 'matricula', label: 'Kennzeichen des Fahrzeugs', type: 'text', required: true }, { id: 'titular_nombre', label: 'Vollständiger Name des Fahrzeughalters', type: 'text', required: true, full: true }, { id: 'titular_dni', label: 'DNI / NIE des Fahrzeughalters', type: 'text', required: true }, ...AUTH_FIELDS ] },
+  'contrato-privado': { tag: 'Weitere Dienstleistungen', title: 'Erstellung eines privaten Vertrags', price: 40, info: 'Erstellung eines privaten Vertrags, angepasst an das vom Kunden angegebene Geschäft.', fields: [ { id: 'sol_nombre', label: 'Vollständiger Name des ursprünglichen Antragstellers', type: 'text', required: true, full: true }, { id: 'sol_dni', label: 'DNI / NIE des ursprünglichen Antragstellers', type: 'text', required: true }, { id: 'sol_email', label: 'E-Mail-Adresse', type: 'email', required: true }, { id: 'sol_telefono', label: 'Telefonnummer', type: 'text', required: false }, { section: 'Vertragsdaten' }, { id: 'tipo_contrato', label: 'Vertragsart', type: 'select', options: ['Fahrzeugkauf', 'Privates Darlehen', 'Miete', 'Schuldanerkenntnis', 'Dienstleistung', 'Reservierung', 'Abtretung', 'Sonstiges'], required: true, full: true }, { id: 'partes_contrato', label: 'Daten der beteiligten Parteien', type: 'textarea', placeholder: 'Name, DNI/CIF, Anschrift und Rolle jeder Partei...', required: true, full: true }, { id: 'objeto_contrato', label: 'Gegenstand des Geschäfts', type: 'textarea', placeholder: 'Beschreiben Sie den Gegenstand, die Dienstleistung, Schuld, das Darlehen oder das zu regelnde Geschäft...', required: true, full: true }, { id: 'importe_operacion', label: 'Vereinbarter Preis oder Betrag', type: 'text', placeholder: 'z. B. 4.500 €', required: false }, { id: 'forma_pago', label: 'Zahlungsweise', type: 'text', placeholder: 'Überweisung, Barzahlung, Raten...', required: false }, { id: 'fecha_plazo', label: 'Lieferdatum oder vorgesehene Frist', type: 'text', required: false }, { id: 'condiciones_especiales', label: 'Besondere Bedingungen, Garantien oder Klauseln', type: 'textarea', placeholder: 'Geben Sie relevante Vereinbarungen, übergebene Unterlagen, Verantwortlichkeiten oder Vertragsstrafen an...', required: false, full: true }, { id: 'documentacion_contrato', label: 'Unterstützende Unterlagen', type: 'file', accept: '.pdf,.jpg,.jpeg,.png,.doc,.docx', required: false, full: true } ] }
+};
+
+function toggleMenu() { document.querySelector('.nav-links').classList.toggle('active'); }
+function closeMenu() { document.querySelector('.nav-links').classList.remove('active'); }
+
+function openModal(serviceKey) {
+  currentService = serviceKey;
+  lastPaymentIntentId = null;
+  const svc = SERVICES[serviceKey];
+  document.getElementById('modalTag').textContent = svc.tag;
+  document.getElementById('modalTitle').textContent = svc.title;
+  renderFormStep(svc);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalOverlay').setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('modalOverlay').setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  currentService = null;
+  lastPaymentIntentId = null;
+  if (cardElement) { cardElement.unmount(); cardElement.destroy(); cardElement = null; }
+}
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+}
+
+function renderFormStep(svc) {
+  if (cardElement) { cardElement.unmount(); cardElement.destroy(); cardElement = null; }
+  let html = `<div class="modal-info">${escapeHTML(svc.info)}</div><div class="form-row">`;
+  if (svc.longInfo) {
+    html = `<div class="modal-info">${escapeHTML(svc.info)}</div><p class="modal-long-info">${escapeHTML(svc.longInfo)}</p>`;
+    if (svc.benefits && svc.benefits.length) {
+      html += `<ul class="modal-benefits">${svc.benefits.map(benefit => `<li>${escapeHTML(benefit)}</li>`).join('')}</ul>`;
+    }
+    if (svc.sampleUrl) {
+      html += `<div class="modal-action-row"><a class="modal-sample-link" href="${escapeHTML(svc.sampleUrl)}" download>Beispiel herunterladen</a></div>`;
+    }
+    html += `<div class="form-row">`;
+  }
+  let inRow = true;
+
+  svc.fields.forEach(f => {
+    if (f.section) {
+      if (inRow) html += `</div>`;
+      html += `<h3 class="form-section-title">${escapeHTML(f.section)}</h3><div class="form-row">`;
+      inRow = true;
+      return;
+    }
+    const cls = f.full ? 'form-group full' : 'form-group';
+    html += `<div class="${cls}">`;
+    html += `<label for="${escapeHTML(f.id)}">${escapeHTML(f.label)}${f.required ? ' *' : ''}</label>`;
+    const placeholder = escapeHTML(f.placeholder || '');
+    if (f.type === 'select') {
+      html += `<select id="${escapeHTML(f.id)}" ${f.required ? 'required' : ''}><option value="">-- Auswählen --</option>`;
+      f.options.forEach(o => html += `<option value="${escapeHTML(o)}">${escapeHTML(o)}</option>`);
+      html += `</select>`;
+    } else if (f.type === 'textarea') {
+      html += `<textarea id="${escapeHTML(f.id)}" placeholder="${placeholder}" rows="3" ${f.required ? 'required' : ''}></textarea>`;
+    } else if (f.type === 'file') {
+      html += `<input type="file" id="${escapeHTML(f.id)}" accept="${escapeHTML(f.accept || '.pdf,.jpg,.jpeg,.png')}" ${f.required ? 'required' : ''}>`;
+    } else {
+      html += `<input type="${escapeHTML(f.type)}" id="${escapeHTML(f.id)}" placeholder="${placeholder}" ${f.required ? 'required' : ''}>`;
+    }
+    html += `</div>`;
+  });
+  if (inRow) html += `</div>`;
+
+  html += `
+    <div class="form-price-box">
+      <div><div class="form-price-label">Preis des Service</div><div class="form-price-note">MwSt. inklusive · Einmalige Zahlung</div></div>
+      <div class="form-price-amount">${svc.price}€</div>
+    </div>
+    <button class="btn-pay" onclick="goToPayment()">${escapeHTML(svc.ctaLabel || 'Weiter zur sicheren Zahlung')}</button>
+    <p class="small-link" style="text-decoration:none;cursor:default;">Ihre Anfrage wird erst nach Abschluss der Zahlung gesendet</p>
+  `;
+  document.getElementById('modalBody').innerHTML = html;
+}
+
+async function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function collectFormData(svc) {
+  const formData = {};
+  const attachments = {};
+  let emailValue = '';
+  for (const f of svc.fields) {
+    if (!f.id) continue;
+    const el = document.getElementById(f.id);
+    if (!el) continue;
+    if (f.type === 'file') {
+      const file = el.files && el.files[0];
+      formData[f.id] = file ? file.name : '';
+      if (file) attachments[f.id] = { name: file.name, type: file.type || 'application/octet-stream', content: await fileToBase64(file) };
+    } else {
+      formData[f.id] = el.value.trim();
+      if (f.type === 'email') emailValue = el.value.trim();
+    }
+  }
+  return { formData, emailValue, attachments };
+}
+
+function validateServiceForm(svc, formData) {
+  const missing = svc.fields.filter(f => f.required && f.id && !String(formData[f.id] || '').trim());
+  if (missing.length) return 'Bitte füllen Sie alle Pflichtfelder aus.';
+  const emailField = svc.fields.find(f => f.type === 'email');
+  if (emailField && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData[emailField.id] || '')) return 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+  return '';
+}
+
+async function goToPayment() {
+  const svc = SERVICES[currentService];
+  const { formData, emailValue, attachments } = await collectFormData(svc);
+  const validationError = validateServiceForm(svc, formData);
+  if (validationError) { alert(validationError); return; }
+
+  window._formData = formData;
+  window._formEmail = emailValue;
+  window._attachments = attachments;
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="payment-header">
+      <div class="payment-icon">💳</div>
+      <h3 class="payment-title">Sichere Zahlung</h3>
+      <p class="payment-subtitle">${escapeHTML(svc.title)} · <strong>${svc.price}€</strong></p>
+    </div>
+    <div class="form-group full"><label for="card_name">Name auf der Karte</label><input type="text" id="card_name" placeholder="Wie auf der Karte angegeben" autocomplete="cc-name"></div>
+    <div class="form-group full"><label>Kartendaten</label><div id="card-element"></div><div id="card-errors" role="alert"></div></div>
+    <div class="form-price-box" style="margin-top:24px;"><div><div class="form-price-label">Gesamtbetrag</div><div class="form-price-note">Einmalige Zahlung · Kein Abonnement</div></div><div class="form-price-amount">${svc.price}€</div></div>
+    <button class="btn-pay" id="submitPaymentBtn" onclick="processPayment()">Bestätigen und bezahlen ${svc.price}€</button>
+    <div class="secure-badge">🔒 Verschlüsselte Zahlung über Stripe</div>
+    <p class="small-link" onclick="renderFormStep(SERVICES[currentService])">← Zurück zum Formular</p>
+  `;
+
+  try {
+    ensureStripe();
+    const style = {
+      base: { color: '#1a1a2e', fontFamily: '"Jost", sans-serif', fontSmoothing: 'antialiased', fontSize: '15px', '::placeholder': { color: '#8898aa' } },
+      invalid: { color: '#e53e3e', iconColor: '#e53e3e' }
+    };
+    cardElement = elements.create('card', { style, hidePostalCode: true });
+    cardElement.mount('#card-element');
+    cardElement.on('change', function(event) { document.getElementById('card-errors').textContent = event.error ? event.error.message : ''; });
+  } catch (error) {
+    document.getElementById('card-errors').textContent = error.message;
+    document.getElementById('submitPaymentBtn').disabled = true;
+  }
+}
+
+async function processPayment() {
+  const svc = SERVICES[currentService];
+  const cardName = document.getElementById('card_name').value.trim();
+  const btn = document.getElementById('submitPaymentBtn');
+  const errorBox = document.getElementById('card-errors');
+  if (!cardName) { errorBox.textContent = 'Bitte geben Sie den Namen auf der Karte ein.'; return; }
+
+  btn.textContent = 'Zahlung wird verarbeitet...';
+  btn.disabled = true;
+  errorBox.textContent = '';
+
+  const reference = 'TRM-' + Date.now().toString().slice(-8);
+
+  try {
+    ensureStripe();
+
+    const createResponse = await fetch(`${API_BASE}/create-payment-intent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        serviceKey: currentService,
+        formData: window._formData || {},
+        clientEmail: window._formEmail || '',
+        attachments: window._attachments || {},
+        reference
+      })
+    });
+
+    const createData = await createResponse.json().catch(() => ({}));
+    if (!createResponse.ok || !createData.clientSecret) {
+      throw new Error(createData.error || 'Die Zahlung konnte bei Stripe nicht erstellt werden.');
+    }
+
+    lastPaymentIntentId = createData.paymentIntentId;
+
+    const result = await stripe.confirmCardPayment(createData.clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: { name: cardName, email: window._formEmail || undefined }
+      }
+    });
+
+    if (result.error) throw new Error(result.error.message);
+    if (!result.paymentIntent || result.paymentIntent.status !== 'succeeded') {
+      throw new Error('Die Zahlung wurde nicht abgeschlossen. Bitte versuchen Sie es erneut oder verwenden Sie eine andere Karte.');
+    }
+
+    btn.textContent = 'Zahlung bestätigt. Anfrage wird gesendet...';
+    await sendOrderEmail(result.paymentIntent.id, reference);
+    showSuccess(reference);
+  } catch (error) {
+    console.error('processPayment error:', error);
+    if (lastPaymentIntentId && String(error.message || '').includes('email')) {
+      showEmailWarning(reference, lastPaymentIntentId);
+      return;
+    }
+    errorBox.textContent = error.message || 'Bei der Bearbeitung Ihrer Anfrage ist ein Problem aufgetreten.';
+    btn.textContent = `Bestätigen und bezahlen ${svc.price}€`;
+    btn.disabled = false;
+  }
+}
+
+async function sendOrderEmail(paymentIntentId, reference) {
+  const response = await fetch(`${API_BASE}/send-order-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      paymentIntentId,
+      serviceKey: currentService,
+      formData: window._formData || {},
+      clientEmail: window._formEmail || '',
+      attachments: window._attachments || {},
+      reference
+    })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'E-Mail-Fehler nach der Zahlung.');
+  return data;
+}
+
+async function sendContactEmail() {
+  const btn = document.getElementById('contactBtn');
+  const feedback = document.getElementById('contactFeedback');
+  const name = document.getElementById('contact_name').value.trim();
+  const email = document.getElementById('contact_email').value.trim();
+  const message = document.getElementById('contact_msg').value.trim();
+
+  if (!name || !email || !message) { feedback.style.color = '#e2c97e'; feedback.textContent = 'Bitte füllen Sie alle Kontaktfelder aus.'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { feedback.style.color = '#e2c97e'; feedback.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'; return; }
+
+  const originalText = btn.textContent;
+  btn.textContent = 'Wird gesendet...';
+  btn.disabled = true;
+  feedback.textContent = '';
+
+  try {
+    const response = await fetch(`${API_BASE}/send-contact-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Die Anfrage konnte nicht gesendet werden.');
+    feedback.style.color = '#e2c97e';
+    feedback.textContent = 'Nachricht erfolgreich gesendet. Wir antworten in Kürze.';
+    document.getElementById('contact_name').value = '';
+    document.getElementById('contact_email').value = '';
+    document.getElementById('contact_msg').value = '';
+  } catch (error) {
+    feedback.style.color = '#f6ad55';
+    feedback.textContent = `Die Nachricht konnte nicht über die Website gesendet werden. Schreiben Sie bitte an ${ADMIN_EMAIL}.`;
+    console.error(error);
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+function showSuccess(ref) {
+  const svc = SERVICES[currentService];
+  document.getElementById('modalBody').innerHTML = `
+    <div class="success-screen">
+      <div class="success-icon">✓</div>
+      <h3 class="success-title">Anfrage und Zahlung erhalten</h3>
+      <p class="success-text">Stripe hat die Zahlung bestätigt und wir haben die Anfrage für <strong>${escapeHTML(svc.title)}</strong> an das Tramitium-Team gesendet.</p>
+      <div class="success-ref">Referenz: ${escapeHTML(ref)}</div>
+      <p style="font-size:13px;color:var(--text-light);margin-bottom:28px;">Bewahren Sie diese Referenz auf. Wir kontaktieren Sie per E-Mail.</p>
+      <button class="btn-primary" style="border:none;cursor:pointer;" onclick="closeModal()">Schließen und zur Website zurückkehren</button>
+    </div>`;
+}
+
+function showEmailWarning(ref, paymentIntentId) {
+  document.getElementById('modalBody').innerHTML = `
+    <div class="success-screen">
+      <div class="success-icon warning-icon">!</div>
+      <h3 class="success-title">Zahlung erhalten, Benachrichtigung ausstehend</h3>
+      <p class="success-text">Die Zahlung wurde von Stripe bestätigt, aber die automatische E-Mail konnte nicht gesendet werden. Zahlen Sie nicht erneut. Schreiben Sie bitte an <strong>${ADMIN_EMAIL}</strong> mit dieser Referenz.</p>
+      <div class="success-ref">Referenz: ${escapeHTML(ref)}</div>
+      <p style="font-size:12px;color:var(--text-light);margin-bottom:28px;">ID Stripe: ${escapeHTML(paymentIntentId)}</p>
+      <button class="btn-primary" style="border:none;cursor:pointer;" onclick="closeModal()">Schließen</button>
+    </div>`;
+}
+
+const CHAT_CONTACT_EMAIL = 'contactos@tramitium.es';
+function addChatMessage(type, text) {
+  const messages = document.getElementById('chatMessages');
+  const message = document.createElement('div');
+  message.className = `chat-message ${type}`;
+  message.textContent = text;
+  messages.appendChild(message);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+const GUIDED_CHAT = {
+  "propiedad": {
+    "title": "Grundbuchamt",
+    "intro": "Wählen Sie das Verfahren zur Immobilie aus, zu dem Sie Informationen benötigen.",
+    "items": {
+      "notaSimple": {
+        "title": "Einfacher Grundbuchauszug",
+        "serviceKey": "prop-nota-simple",
+        "answers": {
+          "paraQue": "Er hilft, die grundlegende rechtliche Situation einer Immobilie zu kennen.",
+          "contiene": "Er kann Angaben zur Immobilie, Eigentümer, Eigentumsanteile, Hypotheken, Pfändungen, Dienstbarkeiten oder andere Belastungen enthalten.",
+          "cuando": "Er wird häufig vor Kauf, Verkauf, Erbschaft oder zur Prüfung offener Belastungen angefordert.",
+          "hacerlo": "Sie können ihn selbst über die Plattform der Register beantragen, aber unvollständige Angaben können zu Verzögerungen oder falschen Unterlagen führen.",
+          "tramitium": "Tramitium prüft die Angaben und hilft, das passende Dokument für den konkreten Zweck anzufordern."
+        }
+      },
+      "inscripcion": {
+        "title": "Eintragung einer Urkunde",
+        "serviceKey": "prop-inscripcion",
+        "answers": {
+          "paraQue": "Sie dient dazu, eine notarielle Urkunde offiziell im Grundbuch eintragen zu lassen.",
+          "contiene": "Sie kann Käufe, Erbschaften, Schenkungen, Zuweisungen, Neubauerklärungen, Teilungserklärungen, Hypotheken und andere Immobilienakte betreffen.",
+          "cuando": "Sie wird genutzt, wenn ein Eigentumswechsel oder ein Recht gegenüber Dritten geschützt werden soll.",
+          "hacerlo": "In der Regel wird die Urkunde notariell unterzeichnet, Steuern werden abgewickelt und danach beim zuständigen Register eingereicht.",
+          "tramitium": "Tramitium hilft, Beanstandungen wegen fehlender Unterlagen, Steuern oder Nachweise zu vermeiden."
+        }
+      },
+      "certificacion": {
+        "title": "Grundbuchbescheinigung",
+        "serviceKey": "prop-certificacion",
+        "answers": {
+          "paraQue": "Sie bescheinigt den Inhalt der Registereinträge offiziell.",
+          "contiene": "Sie kann Eigentum, Belastungen, wörtliche Einträge oder konkrete Registerlagen bescheinigen.",
+          "cuando": "Sie wird bei Gerichtsverfahren, Erbschaften, Bankvorgängen, Ansprüchen oder komplexen Immobiliengeschäften verwendet.",
+          "hacerlo": "Sie kann beim zuständigen Register oder über die Online-Plattform der Register beantragt werden.",
+          "tramitium": "Tramitium hilft, die richtige Art der Bescheinigung für den vorgesehenen Zweck zu wählen."
+        }
+      },
+      "cancelacion": {
+        "title": "Löschung einer Belastung",
+        "serviceKey": "prop-cancelacion",
+        "answers": {
+          "paraQue": "Sie entfernt eine Belastung aus dem Register, wenn sie nicht mehr erscheinen sollte.",
+          "contiene": "Je nach Fall können Schuldenfreiheitsbescheinigung, Löschungsurkunde, Gerichtsbeschluss oder Verwaltungsunterlagen erforderlich sein.",
+          "cuando": "Häufig betrifft dies eine bereits bezahlte Hypothek, die noch im Grundbuch erscheint.",
+          "hacerlo": "Der Vorgang erfordert normalerweise Unterlagen, gegebenenfalls notarielle Schritte, Steuern und Einreichung beim Register.",
+          "tramitium": "Tramitium hilft zu bestimmen, welche Belastung vorliegt und welche Unterlagen benötigt werden."
+        }
+      },
+      "localizacion": {
+        "title": "Eigentumslokalisierung",
+        "serviceKey": "prop-localizacion",
+        "answers": {
+          "paraQue": "Sie hilft zu ermitteln, in welchen Registern Vermögenswerte oder Rechte auf eine Person oder Gesellschaft eingetragen sind.",
+          "contiene": "Sie liefert nicht alle Details der einzelnen Immobilien, zeigt aber, wo Eintragungen vorhanden sein können.",
+          "cuando": "Sie ist nützlich bei Erbschaften, Vermögensprüfungen, Forderungen, Scheidungen oder Gerichtsverfahren.",
+          "hacerlo": "Sie kann online mit genauen Identifikationsdaten beantragt werden.",
+          "tramitium": "Tramitium hilft, Verwechslungen bei ähnlichen Namen durch korrekte Identifikationsdaten zu vermeiden."
+        }
+      }
+    }
+  },
+  "civil": {
+    "title": "Standesamt",
+    "intro": "Wählen Sie die standesamtliche Bescheinigung oder das Verfahren aus.",
+    "items": {
+      "nacimiento": {
+        "title": "Geburtsurkunde",
+        "serviceKey": "civil-nacimiento",
+        "answers": {
+          "paraQue": "Sie weist die Geburt einer Person offiziell nach.",
+          "contiene": "Sie enthält Angaben wie Datum, Ort, Identität und Abstammung.",
+          "cuando": "Sie kann für Ausweise, Reisepässe, Eheschließung, Staatsangehörigkeit, Erbschaften oder Verwaltungsverfahren erforderlich sein.",
+          "hacerlo": "Sie kann häufig online über die Plattform des Justizministeriums beantragt werden.",
+          "tramitium": "Tramitium hilft, die richtige Art der Urkunde auszuwählen."
+        }
+      },
+      "matrimonio": {
+        "title": "Heiratsurkunde",
+        "serviceKey": "civil-matrimonio",
+        "answers": {
+          "paraQue": "Sie weist offiziell nach, dass eine Ehe im Standesamt eingetragen ist.",
+          "contiene": "Sie enthält Angaben zu den Ehegatten, Datum, Ort der Eheschließung und Registereintrag.",
+          "cuando": "Sie wird bei Erbschaften, Ausländerrecht, Staatsangehörigkeit, Scheidung, Renten und Verwaltungsverfahren verwendet.",
+          "hacerlo": "Sie kann online mit Angaben zu den Ehegatten sowie Datum und Ort der Eheschließung beantragt werden.",
+          "tramitium": "Tramitium hilft, wenn die Ehe alt ist, im Ausland geschlossen wurde oder Eintragungsdaten fehlen."
+        }
+      },
+      "defuncion": {
+        "title": "Sterbeurkunde",
+        "serviceKey": "civil-defuncion",
+        "answers": {
+          "paraQue": "Sie weist den Tod einer Person offiziell nach.",
+          "contiene": "Sie enthält die Registerdaten des Todesfalls und der verstorbenen Person.",
+          "cuando": "Sie ist für Erbschaften, Lebensversicherungen, Renten, Bankkonten, notarielle Verfahren und Eigentumsänderungen erforderlich.",
+          "hacerlo": "Sie kann online mit den Angaben der verstorbenen Person sowie Datum und Ort des Todes beantragt werden.",
+          "tramitium": "Tramitium hilft, das richtige Standesamt zu finden und die passende Urkunde zu beantragen."
+        }
+      },
+      "feVida": {
+        "title": "Lebens- und Familienstandsbescheinigung",
+        "serviceKey": "civil-fe-vida",
+        "answers": {
+          "paraQue": "Sie bestätigt, dass eine Person lebt und welchen Familienstand sie zum Ausstellungsdatum hat.",
+          "contiene": "Sie bestätigt Leben und Familienstand.",
+          "cuando": "Sie wird für Renten, Auslandsverfahren, Eheschließungen, öffentliche Leistungen und Verwaltungsakten genutzt.",
+          "hacerlo": "In der Regel ist persönliches Erscheinen mit Ausweisdokument erforderlich.",
+          "tramitium": "Tramitium informiert über Termine, Unterlagen und mögliche Alternativen."
+        }
+      },
+      "cambioNombre": {
+        "title": "Namensänderung",
+        "serviceKey": "civil-cambio-nombre",
+        "answers": {
+          "paraQue": "Sie ermöglicht eine offizielle Änderung von Vorname oder Nachnamen, wenn die gesetzlichen Voraussetzungen erfüllt sind.",
+          "contiene": "Der Antrag muss mit Unterlagen und Nachweisen begründet werden.",
+          "cuando": "Sie kann bei gewöhnlicher Verwendung, sprachlicher Anpassung, Fehlern oder gesetzlich vorgesehenen Gründen beantragt werden.",
+          "hacerlo": "Der Antrag wird beim Standesamt mit Ausweis, Geburtsurkunde und Nachweisen eingereicht.",
+          "tramitium": "Tramitium hilft, den Antrag sauber vorzubereiten und den Grund richtig zu begründen."
+        }
+      }
+    }
+  },
+  "mercantil": {
+    "title": "Handelsregister",
+    "intro": "Wählen Sie das handelsregisterliche Verfahren aus.",
+    "items": {
+      "denominacion": {
+        "title": "Firmenbezeichnung",
+        "serviceKey": "merc-denominacion",
+        "answers": {
+          "paraQue": "Sie dient dazu, den Namen einer Gesellschaft vor der Gründung zu prüfen und zu reservieren.",
+          "contiene": "Die Negativbescheinigung bestätigt, dass keine identische oder verwechselbare Bezeichnung besteht.",
+          "cuando": "Sie ist für die Gründung von Gesellschaften erforderlich.",
+          "hacerlo": "Sie wird beim zentralen Handelsregister mit mehreren Namensvorschlägen beantragt.",
+          "tramitium": "Tramitium hilft, tragfähige Bezeichnungen zu wählen und Ablehnungen zu reduzieren."
+        }
+      },
+      "cuentas": {
+        "title": "Hinterlegung des Jahresabschlusses",
+        "serviceKey": "merc-deposito",
+        "answers": {
+          "paraQue": "Sie erfüllt die gesetzliche Pflicht, die Jahresabschlüsse einer Gesellschaft beim Handelsregister einzureichen.",
+          "contiene": "Sie kann Bilanz, Gewinn- und Verlustrechnung, Anhang, Genehmigungsbescheinigung und gegebenenfalls Prüfungsbericht umfassen.",
+          "cuando": "Sie erfolgt nach Aufstellung und Genehmigung der Jahresabschlüsse.",
+          "hacerlo": "Sie kann digital über die Systeme der Register eingereicht werden.",
+          "tramitium": "Tramitium hilft, Mängel bei Daten, Unterschriften, Modellen oder Bescheinigungen zu vermeiden."
+        }
+      },
+      "certificacionMercantil": {
+        "title": "Handelsregisterbescheinigung",
+        "serviceKey": "merc-certificacion",
+        "answers": {
+          "paraQue": "Sie bescheinigt offiziell eingetragene Informationen über eine Gesellschaft oder einen Unternehmer.",
+          "contiene": "Sie kann Geschäftsführer, Gültigkeit, Unternehmensgegenstand, Kapital, Vollmachten, Satzung oder Gesellschaftsakte bescheinigen.",
+          "cuando": "Sie wird benötigt, wenn ein offizielles Dokument mit höherem Beweiswert erforderlich ist.",
+          "hacerlo": "Sie wird beim zuständigen Handelsregister oder online beantragt.",
+          "tramitium": "Tramitium hilft, genau festzulegen, was bescheinigt werden soll."
+        }
+      },
+      "escrituraMercantil": {
+        "title": "Eintragung einer Handelsurkunde",
+        "serviceKey": "merc-inscripcion",
+        "answers": {
+          "paraQue": "Sie macht Gesellschaftsakte öffentlich und gegenüber Dritten wirksam.",
+          "contiene": "Sie kann Gründung, Geschäftsführer, Kapitalerhöhung, Sitzverlegung, Satzung, Auflösung oder Vollmachten betreffen.",
+          "cuando": "Sie wird nach notarieller Unterzeichnung einer gesellschaftsbezogenen Urkunde genutzt.",
+          "hacerlo": "Vor der Einreichung können steuerliche Modelle oder weitere Schritte erforderlich sein.",
+          "tramitium": "Tramitium prüft Beschlüsse, Bescheinigungen und Anforderungen, um Registermängel zu vermeiden."
+        }
+      },
+      "notaMercantil": {
+        "title": "Einfacher Handelsregisterauszug",
+        "serviceKey": "merc-nota",
+        "answers": {
+          "paraQue": "Er liefert grundlegende Informationen über eine im Handelsregister eingetragene Gesellschaft.",
+          "contiene": "Er kann allgemeine Daten, Kapital, Geschäftsführer, Bevollmächtigte, Veröffentlichungen und hinterlegte Abschlüsse enthalten.",
+          "cuando": "Er ist nützlich, um eine Gesellschaft und ihre Vertretung vor Vertragsabschluss zu prüfen.",
+          "hacerlo": "Er kann nach Firmenname, Steuernummer oder Registerdaten beantragt werden.",
+          "tramitium": "Tramitium hilft, die richtige Gesellschaft bei ähnlichen Namen oder Konzernstrukturen zu identifizieren."
+        }
+      }
+    }
+  },
+  "dgt": {
+    "title": "DGT und Fahrzeuge",
+    "intro": "Wählen Sie das fahrzeugbezogene Verfahren aus.",
+    "items": {
+      "informeDgt": {
+        "title": "DGT-Fahrzeugbericht nach Kennzeichen",
+        "serviceKey": "trafico-informe-matricula",
+        "answers": {
+          "paraQue": "Er liefert öffentliche Informationen zu einem in Spanien zugelassenen Fahrzeug.",
+          "contiene": "Je nach Bericht kann er Belastungen, Vorfälle, Beschränkungen, Verwaltungshistorie, Eigentümer oder technische Daten zeigen.",
+          "cuando": "Er ist besonders nützlich vor dem Kauf eines Gebrauchtwagens, Motorrads oder Transporters.",
+          "hacerlo": "Die DGT ermöglicht Anfragen online, per App, telefonisch oder persönlich; detaillierte Berichte können gebührenpflichtig sein.",
+          "tramitium": "Tramitium hilft, Hinweise wie Eigentumsvorbehalt, Pfändungen, Sperren, ITV oder Verwaltungsbeschränkungen zu verstehen."
+        }
+      }
+    }
+  },
+  "empresas": {
+    "title": "Unternehmensberichte",
+    "intro": "Wählen Sie den gewünschten Bericht aus.",
+    "items": {
+      "informeEmpresarial": {
+        "title": "Umfassender Unternehmensbericht",
+        "serviceKey": "informe-empresarial",
+        "answers": {
+          "paraQue": "Er hilft, eine Gesellschaft vor Vertragsabschluss, Zusammenarbeit, Kreditgewährung oder Geschäftsentscheidung einzuschätzen.",
+          "contiene": "Er enthält Identifikationsdaten, Tätigkeit, wirtschaftliche Informationen, Vorfälle, Verfahren, Organmitglieder, Verbindungen und eine orientierende Risikobewertung.",
+          "cuando": "Er ist nützlich vor der Beauftragung eines Lieferanten, einer Zusammenarbeit, Finanzierung oder Zuverlässigkeitsprüfung.",
+          "hacerlo": "Öffentliche Informationen sind oft verstreut; dieser Service bündelt sie in einem klaren Dokument.",
+          "tramitium": "Tramitium liefert einen strukturierten PDF-Bericht mit geordneten Daten und einer praktischen Schlussfolgerung."
+        }
+      }
+    }
+  },
+  "contratos": {
+    "title": "Private Verträge",
+    "intro": "Informationen zu privaten Verträgen.",
+    "items": {
+      "contratoPrivado": {
+        "title": "Erstellung eines privaten Vertrags",
+        "serviceKey": "contrato-privado",
+        "answers": {
+          "paraQue": "Er hält die Bedingungen eines Geschäfts zwischen Privatpersonen oder Unternehmen schriftlich fest.",
+          "contiene": "Er sollte Parteien, Gegenstand, Preis, Zahlungsweise, Fristen, Verantwortlichkeiten, Garantien und Folgen bei Nichterfüllung regeln.",
+          "cuando": "Er kann für Fahrzeugkäufe, private Darlehen, Mieten, Schuldanerkenntnisse, Dienstleistungen, Reservierungen oder Abtretungen genutzt werden.",
+          "hacerlo": "Allgemeine Vorlagen passen oft nicht zum konkreten Fall und lassen wichtige Klauseln aus.",
+          "tramitium": "Tramitium hilft, unklare Formulierungen, Lücken und spätere Konflikte zu vermeiden."
+        }
+      }
+    }
+  }
+};
+
+const GUIDED_QUESTION_LABELS = {
+  "paraQue": "Wofür ist es gedacht?",
+  "contiene": "Welche Informationen enthält es?",
+  "cuando": "Wann wird es üblicherweise benötigt?",
+  "hacerlo": "Kann ich es selbst erledigen?",
+  "tramitium": "Warum mit Tramitium?"
+};
+
+let guidedChatStarted = false;
+let guidedCurrentCategory = null;
+let guidedCurrentItem = null;
+
+function toggleChat(forceOpen) {
+  const widget = document.getElementById('chatWidget');
+  const launcher = document.getElementById('chatLauncherBtn') || widget.querySelector('.chat-launcher');
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !widget.classList.contains('open');
+  widget.classList.toggle('open', shouldOpen);
+  if (launcher) launcher.setAttribute('aria-expanded', String(shouldOpen));
+  if (shouldOpen) startChat();
+}
+
+function startChat() {
+  if (!guidedChatStarted) {
+    guidedChatStarted = true;
+    resetGuidedChat();
+  }
+}
+
+function resetGuidedChat() {
+  guidedCurrentCategory = null;
+  guidedCurrentItem = null;
+  clearChatMessages();
+  addChatMessage('bot', 'Hallo, ich bin der Tramitium-Assistent. Ich begleite Sie Schritt für Schritt zur passenden Information.');
+  addChatMessage('bot', 'Wählen Sie eine Kategorie aus.');
+  renderGuidedOptions([
+    { label: 'Grundbuchamt', action: () => showGuidedCategory('propiedad') },
+    { label: 'Standesamt', action: () => showGuidedCategory('civil') },
+    { label: 'Handelsregister', action: () => showGuidedCategory('mercantil') },
+    { label: 'DGT und Fahrzeuge', action: () => showGuidedCategory('dgt') },
+    { label: 'Unternehmensberichte', action: () => showGuidedCategory('empresas') },
+    { label: 'Private Verträge', action: () => showGuidedCategory('contratos') },
+    { label: 'Preise und Zahlung', className: 'primary', action: showGuidedPrices },
+    { label: 'Mit Tramitium sprechen', action: showGuidedContact }
+  ]);
+}
+
+function showGuidedCategory(categoryKey) {
+  const category = GUIDED_CHAT[categoryKey];
+  guidedCurrentCategory = categoryKey;
+  guidedCurrentItem = null;
+  addChatMessage('user', category.title);
+  addChatMessage('bot', `${category.title}. ${category.intro}`);
+  const options = Object.keys(category.items).map(itemKey => ({
+    label: category.items[itemKey].title,
+    action: () => showGuidedItem(categoryKey, itemKey)
+  }));
+  options.push({ label: 'Zurück zum Start', className: 'muted', action: resetGuidedChat });
+  renderGuidedOptions(options);
+}
+
+function showGuidedItem(categoryKey, itemKey) {
+  const item = GUIDED_CHAT[categoryKey].items[itemKey];
+  guidedCurrentCategory = categoryKey;
+  guidedCurrentItem = itemKey;
+  addChatMessage('user', item.title);
+  addChatMessage('bot', `${item.title}. Was möchten Sie wissen?`);
+  renderGuidedItemOptions();
+}
+
+function renderGuidedItemOptions() {
+  const item = GUIDED_CHAT[guidedCurrentCategory].items[guidedCurrentItem];
+  const options = Object.keys(GUIDED_QUESTION_LABELS).map(questionKey => ({
+    label: GUIDED_QUESTION_LABELS[questionKey],
+    action: () => showGuidedAnswer(questionKey)
+  }));
+  if (item.serviceKey && SERVICES[item.serviceKey]) {
+    options.push({ label: 'Ich möchte es anfragen', className: 'primary', action: () => openGuidedService(item.serviceKey) });
+  }
+  options.push(
+    { label: 'Anderes Verfahren ansehen', action: () => showGuidedCategory(guidedCurrentCategory) },
+    { label: 'Zurück zum Start', className: 'muted', action: resetGuidedChat },
+    { label: 'Das beantwortet meine Frage nicht', action: showGuidedContact }
+  );
+  renderGuidedOptions(options);
+}
+
+function showGuidedAnswer(questionKey) {
+  const item = GUIDED_CHAT[guidedCurrentCategory].items[guidedCurrentItem];
+  addChatMessage('user', GUIDED_QUESTION_LABELS[questionKey]);
+  addChatMessage('bot', item.answers[questionKey]);
+  renderGuidedOptions([
+    { label: 'Weitere Informationen zu diesem Verfahren', action: renderGuidedItemOptions },
+    { label: 'Anderes Verfahren ansehen', action: () => showGuidedCategory(guidedCurrentCategory) },
+    item.serviceKey && SERVICES[item.serviceKey] ? { label: 'Ich möchte es anfragen', className: 'primary', action: () => openGuidedService(item.serviceKey) } : null,
+    { label: 'Das beantwortet meine Frage nicht', action: showGuidedContact }
+  ].filter(Boolean));
+}
+
+function showGuidedPrices() {
+  addChatMessage('user', 'Preise und Zahlung');
+  addChatMessage('bot', 'Die Preise stehen neben jedem Verfahren. Zur Orientierung: Einfacher Grundbuchauszug ab 25 €, Eigentumslokalisierung ab 25 €, einfacher Handelsregisterauszug ab 25 € und DGT-Fahrzeugbericht nach Kennzeichen ab 25 €. Die Zahlung erfolgt sicher über Stripe.');
+  renderGuidedOptions([
+    { label: 'Verfahren ansehen', action: resetGuidedChat },
+    { label: 'Mit Tramitium sprechen', action: showGuidedContact }
+  ]);
+}
+
+function showGuidedContact() {
+  addChatMessage('user', 'Das beantwortet meine Frage nicht');
+  addChatMessage('bot', `Für eine persönliche Antwort schreiben Sie bitte an ${CHAT_CONTACT_EMAIL}. Wir antworten innerhalb von 24 Stunden.`);
+  renderGuidedOptions([
+    { label: 'Zurück zum Start', action: resetGuidedChat },
+    { label: 'Chat schließen', className: 'muted', action: () => toggleChat(false) }
+  ]);
+}
+
+function openGuidedService(serviceKey) {
+  addChatMessage('user', 'Ich möchte es anfragen');
+  addChatMessage('bot', 'Sehr gut. Ich öffne das Formular für das ausgewählte Verfahren.');
+  setTimeout(() => {
+    toggleChat(false);
+    openModal(serviceKey);
+  }, 350);
+}
+
+function renderGuidedOptions(options) {
+  const container = document.getElementById('chatQuickActions');
+  container.innerHTML = '';
+  options.forEach(option => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `chat-chip ${option.className || ''}`.trim();
+    button.textContent = option.label;
+    button.addEventListener('click', option.action);
+    container.appendChild(button);
+  });
+}
+
+function clearChatMessages() {
+  const messages = document.getElementById('chatMessages');
+  if (messages) messages.innerHTML = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const close = document.getElementById('chatCloseBtn');
+  if (close) close.addEventListener('click', () => toggleChat(false));
+});
+
+</script>
+</body>
+</html>
+
+
+
+
+
+

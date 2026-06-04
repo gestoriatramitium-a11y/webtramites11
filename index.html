@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tramitium — Gestoría Profesional</title>
+<title>Tramitium | Gestoría online para trámites administrativos</title>
+<meta name="description" content="En Tramitium te ayudamos a gestionar trámites administrativos online de forma sencilla, cómoda y sin desplazamientos.">
+<!-- i18n-seo-start -->
+<link rel="canonical" href="https://www.tramitium.es/">
+<link rel="alternate" hreflang="es" href="https://www.tramitium.es/">
+<link rel="alternate" hreflang="en" href="https://www.tramitium.es/en/">
+<link rel="alternate" hreflang="de" href="https://www.tramitium.es/de/">
+<link rel="alternate" hreflang="x-default" href="https://www.tramitium.es/">
+<!-- i18n-seo-end -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -59,6 +68,10 @@
   .nav-links a:hover { color: var(--gold); }
   .nav-cta { border: 1px solid var(--gold); color: var(--gold) !important; padding: 8px 22px; transition: all 0.3s !important; }
   .nav-cta:hover { background: var(--gold) !important; color: var(--navy) !important; }
+  .language-switcher { display: flex; align-items: center; gap: 3px; border: 1px solid rgba(201,168,76,0.32); padding: 3px; }
+  .language-switcher a { padding: 4px 7px; font-size: 11px; line-height: 1; letter-spacing: 1.2px; color: rgba(255,255,255,0.72); }
+  .language-switcher a:hover { color: var(--gold); }
+  .language-switcher a.active { background: var(--gold); color: var(--navy) !important; }
   .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 101; background: transparent; border: 0; }
   .menu-toggle span { width: 25px; height: 2px; background: var(--gold); transition: all 0.3s; }
 
@@ -276,6 +289,23 @@
     .chat-launcher { width: 100%; min-width: 0; }
     .chat-message { max-width: 92%; }
   }
+
+  .blog-page { background: var(--cream); padding-top: 72px; }
+  .blog-hero { background: var(--navy); padding: clamp(70px, 9vw, 118px) 5% clamp(48px, 7vw, 84px); position: relative; overflow: hidden; }
+  .blog-hero::before { content: 'GUIAS'; position: absolute; right: 4%; bottom: -48px; font-family: 'Playfair Display', serif; font-size: clamp(92px, 18vw, 230px); color: rgba(255,255,255,0.035); font-weight: 700; }
+  .blog-hero-inner { position: relative; z-index: 1; max-width: 900px; }
+  .blog-hero .section-title { color: var(--white); max-width: 780px; }
+  .blog-hero .section-subtitle { color: rgba(255,255,255,0.68); margin: 0; max-width: 740px; }
+  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1320px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 5%; }
+  .blog-card { background: var(--white); border-left: 3px solid var(--gold); box-shadow: var(--shadow); padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; gap: 18px; }
+  .blog-card h2 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: clamp(22px, 2.4vw, 30px); line-height: 1.2; }
+  .blog-card p, .blog-card li { color: var(--text-mid); font-family: 'Cormorant Garamond', serif; font-size: 17px; line-height: 1.7; }
+  .blog-card ul { padding-left: 18px; display: grid; gap: 10px; }
+  .blog-card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
+  .blog-card-actions .btn-primary, .blog-card-actions .btn-outline { padding: 12px 18px; font-size: 11px; }
+  .blog-card-actions .btn-outline { color: var(--navy); border-color: rgba(15,30,60,0.28); }
+  .blog-card-actions .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  @media (max-width: 1024px) { .blog-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -287,8 +317,13 @@
   <ul class="nav-links">
     <li><a href="#servicios" onclick="closeMenu()">Servicios</a></li>
     <li><a href="#proceso" onclick="closeMenu()">Cómo funciona</a></li>
-    <li><a href="nosotros.html" onclick="closeMenu()">Nosotros</a></li>
-    <li><a href="blog.html" onclick="closeMenu()">Blog</a></li>
+    <li><a href="#nosotros" onclick="closeMenu()">Nosotros</a></li>
+    <li><a href="/blog/" onclick="closeMenu()">Blog</a></li>
+    <li class="language-switcher" aria-label="Selector de idioma">
+      <a href="/" hreflang="es" lang="es" class="active">ES</a>
+      <a href="/en/" hreflang="en" lang="en" class="">EN</a>
+      <a href="/de/" hreflang="de" lang="de" class="">DE</a>
+    </li>
     <li><a href="#contacto" class="nav-cta" onclick="closeMenu()">Contactar</a></li>
   </ul>
 </nav>
@@ -319,7 +354,7 @@
   <div class="intro">
     <div class="intro-img-wrap reveal">
       <div class="intro-img-deco"></div>
-      <img class="intro-img" src="assets/img/ceo.jpg" loading="lazy" alt="CEO de Tramitium">
+      <img class="intro-img" src="/assets/img/ceo.jpg" loading="lazy" alt="CEO de Tramitium">
       <div class="intro-badge"><span class="intro-badge-num">20+</span><div class="intro-badge-text">Años de experiencia profesional</div></div>
     </div>
     <div class="intro-text reveal">
@@ -439,7 +474,7 @@
 <footer>
   <div class="footer-logo">Tramit<span>ium</span> · Gestoría Profesional</div>
   <p>© 2026 Tramitium. Todos los derechos reservados.</p>
-  <div class="footer-links"><a href="aviso-legal.html">Aviso legal</a><a href="politica-privacidad.html">Política de privacidad</a><a href="cookies.html">Cookies</a></div>
+  <div class="footer-links"><a href="/aviso-legal.html">Aviso legal</a><a href="/politica-privacidad.html">Política de privacidad</a><a href="/cookies.html">Cookies</a></div>
 </footer>
 
 <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
@@ -520,7 +555,7 @@ const SERVICES = {
   'merc-certificacion': { tag: 'Registro Mercantil', title: 'Certificación Registral Mercantil', price: 80, info: 'Certificado oficial sobre situación societaria.', fields: withAuthorization([ { id: 'sociedad', label: 'Sociedad', type: 'text', required: true, full: true }, { id: 'cif', label: 'CIF', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true } ]) },
   'merc-inscripcion': { tag: 'Registro Mercantil', title: 'Inscripción de Escritura Mercantil', price: 205, info: 'Presentación de constitución, modificación estatutaria, etc.', fields: withAuthorization([ { id: 'sociedad', label: 'Sociedad', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'tipo_escritura', label: 'Tipo', type: 'text', required: true } ]) },
   'merc-nota': { tag: 'Registro Mercantil', title: 'Nota Simple Mercantil', price: 25, info: 'Información registral básica de una sociedad.', fields: withAuthorization([ { id: 'sociedad', label: 'Sociedad', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true } ]) },
-  'informe-empresarial': { tag: 'Otros servicios', title: 'Informe Empresarial Integral', price: 15, ctaLabel: 'Solicitar informe', info: 'Obtén un informe claro y ordenado sobre una empresa antes de contratar, colaborar o tomar una decisión comercial.', longInfo: 'El servicio de Informe Empresarial Integral está pensado para quienes necesitan conocer la situación general de una empresa antes de iniciar una relación comercial, conceder crédito, contratar un proveedor o revisar la fiabilidad de una sociedad. El cliente recibirá un documento descargable en PDF con la información estructurada de forma sencilla, incluyendo datos identificativos, actividad, información económica, incidencias, procedimientos, cargos sociales, vinculaciones empresariales y una valoración orientativa del riesgo.', benefits: ['Ayuda a tomar decisiones comerciales con más seguridad.', 'Reúne en un único documento información que normalmente está dispersa.', 'Presenta los datos de forma clara y fácil de entender.', 'Sirve como apoyo antes de contratar, financiar o colaborar con una empresa.', 'Permite descargar un informe de ejemplo para ver el tipo de documento que se entregaría.'], sampleUrl: 'informe_empresarial_ejemplo_tramitium.docx', fields: [ { id: 'sol_nombre', label: 'Nombre completo del solicitante original', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'sol_telefono', label: 'Teléfono de contacto', type: 'text', required: false }, { section: 'Empresa a analizar' }, { id: 'empresa_nombre', label: 'Nombre o razón social de la empresa', type: 'text', required: true, full: true }, { id: 'empresa_cif', label: 'CIF / NIF de la empresa', type: 'text', required: false }, { id: 'empresa_web', label: 'Web o datos de identificación adicionales', type: 'text', required: false, full: true }, { id: 'motivo_informe', label: 'Motivo de la solicitud', type: 'select', options: ['Contratar proveedor', 'Conceder crédito', 'Colaboración comercial', 'Revisión de fiabilidad', 'Antes de contratar', 'Otro'], required: true, full: true }, { id: 'observaciones', label: 'Observaciones o datos adicionales', type: 'textarea', placeholder: 'Indique cualquier detalle que pueda ayudar a preparar el informe...', required: false, full: true } ] },
+  'informe-empresarial': { tag: 'Otros servicios', title: 'Informe Empresarial Integral', price: 15, ctaLabel: 'Solicitar informe', info: 'Obtén un informe claro y ordenado sobre una empresa antes de contratar, colaborar o tomar una decisión comercial.', longInfo: 'El servicio de Informe Empresarial Integral está pensado para quienes necesitan conocer la situación general de una empresa antes de iniciar una relación comercial, conceder crédito, contratar un proveedor o revisar la fiabilidad de una sociedad. El cliente recibirá un documento descargable en PDF con la información estructurada de forma sencilla, incluyendo datos identificativos, actividad, información económica, incidencias, procedimientos, cargos sociales, vinculaciones empresariales y una valoración orientativa del riesgo.', benefits: ['Ayuda a tomar decisiones comerciales con más seguridad.', 'Reúne en un único documento información que normalmente está dispersa.', 'Presenta los datos de forma clara y fácil de entender.', 'Sirve como apoyo antes de contratar, financiar o colaborar con una empresa.', 'Permite descargar un informe de ejemplo para ver el tipo de documento que se entregaría.'], sampleUrl: '/informe_empresarial_ejemplo_tramitium.docx', fields: [ { id: 'sol_nombre', label: 'Nombre completo del solicitante original', type: 'text', required: true, full: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'sol_telefono', label: 'Teléfono de contacto', type: 'text', required: false }, { section: 'Empresa a analizar' }, { id: 'empresa_nombre', label: 'Nombre o razón social de la empresa', type: 'text', required: true, full: true }, { id: 'empresa_cif', label: 'CIF / NIF de la empresa', type: 'text', required: false }, { id: 'empresa_web', label: 'Web o datos de identificación adicionales', type: 'text', required: false, full: true }, { id: 'motivo_informe', label: 'Motivo de la solicitud', type: 'select', options: ['Contratar proveedor', 'Conceder crédito', 'Colaboración comercial', 'Revisión de fiabilidad', 'Antes de contratar', 'Otro'], required: true, full: true }, { id: 'observaciones', label: 'Observaciones o datos adicionales', type: 'textarea', placeholder: 'Indique cualquier detalle que pueda ayudar a preparar el informe...', required: false, full: true } ] },
   'trafico-informe-matricula': { tag: 'Tráfico', title: 'Informe de Tráfico de un Vehículo por Matrícula', price: 25, info: 'Informe del vehículo solicitado a partir de su matrícula.', fields: [ { id: 'matricula', label: 'Matrícula del vehículo', type: 'text', required: true }, { id: 'titular_nombre', label: 'Nombre completo del titular del vehículo', type: 'text', required: true, full: true }, { id: 'titular_dni', label: 'DNI / NIE del titular del vehículo', type: 'text', required: true }, ...AUTH_FIELDS ] },
   'contrato-privado': { tag: 'Otros servicios', title: 'Elaboración de Contrato Privado', price: 40, info: 'Redacción de contrato privado adaptado a la operación indicada por el cliente.', fields: [ { id: 'sol_nombre', label: 'Nombre completo del solicitante original', type: 'text', required: true, full: true }, { id: 'sol_dni', label: 'DNI / NIE del solicitante original', type: 'text', required: true }, { id: 'sol_email', label: 'Correo electrónico', type: 'email', required: true }, { id: 'sol_telefono', label: 'Teléfono de contacto', type: 'text', required: false }, { section: 'Datos del contrato' }, { id: 'tipo_contrato', label: 'Tipo de contrato', type: 'select', options: ['Compraventa de vehículo', 'Préstamo entre particulares', 'Alquiler', 'Reconocimiento de deuda', 'Prestación de servicios', 'Reserva', 'Cesión', 'Otro'], required: true, full: true }, { id: 'partes_contrato', label: 'Datos de las partes intervinientes', type: 'textarea', placeholder: 'Nombre, DNI/CIF, domicilio y papel de cada parte...', required: true, full: true }, { id: 'objeto_contrato', label: 'Objeto de la operación', type: 'textarea', placeholder: 'Describa el bien, servicio, deuda, préstamo u operación que debe regularse...', required: true, full: true }, { id: 'importe_operacion', label: 'Precio o importe pactado', type: 'text', placeholder: 'Ej. 4.500 €', required: false }, { id: 'forma_pago', label: 'Forma de pago', type: 'text', placeholder: 'Transferencia, efectivo, plazos...', required: false }, { id: 'fecha_plazo', label: 'Fecha de entrega o plazo previsto', type: 'text', required: false }, { id: 'condiciones_especiales', label: 'Condiciones, garantías o cláusulas especiales', type: 'textarea', placeholder: 'Indique cualquier pacto relevante, documentación entregada, responsabilidades o penalizaciones...', required: false, full: true }, { id: 'documentacion_contrato', label: 'Documentación de apoyo', type: 'file', accept: '.pdf,.jpg,.jpeg,.png,.doc,.docx', required: false, full: true } ] }
 };
@@ -828,131 +863,6 @@ function showEmailWarning(ref, paymentIntentId) {
 }
 
 const CHAT_CONTACT_EMAIL = 'contactos@tramitium.es';
-let chatStarted = false;
-
-const CHAT_KNOWLEDGE = [
-  {
-    title: 'Precios y pago',
-    keywords: ['precio', 'cuesta', 'coste', 'tarifa', 'pago', 'pagar', 'stripe'],
-    answer: 'Los precios aparecen junto a cada trámite. Como referencia, la Nota Simple Informativa parte de 25 €, la Nota de Localización de Propiedades de 25 €, la Nota Simple Mercantil de 25 € y el Informe de Tráfico por matrícula de 25 €. El pago se realiza de forma segura con Stripe.'
-  },
-  {
-    title: 'Nota Simple Informativa',
-    keywords: ['nota simple', 'propiedad', 'finca', 'inmueble', 'titular', 'cargas', 'hipoteca', 'embargo', 'usufructo', 'servidumbre'],
-    answer: 'La Nota Simple Informativa sirve para conocer la situación jurídica básica de una vivienda, local, terreno, garaje u otro inmueble inscrito. Puede mostrar identificación de la finca, titularidad, porcentaje de propiedad y posibles cargas como hipotecas, embargos, usufructos o servidumbres. Tiene valor informativo, no probatorio como una certificación registral.'
-  },
-  {
-    title: 'Inscripción de Escritura',
-    keywords: ['inscripcion escritura', 'inscripción escritura', 'escritura propiedad', 'compraventa', 'herencia', 'donacion', 'donación', 'obra nueva', 'division horizontal', 'división horizontal'],
-    answer: 'La Inscripción de Escritura consiste en presentar una escritura pública ante el Registro de la Propiedad para que un acto quede inscrito oficialmente, como una compraventa, herencia, donación, adjudicación, obra nueva, división horizontal o hipoteca. Es delicado porque pueden existir impuestos, justificantes o defectos que obliguen a subsanar.'
-  },
-  {
-    title: 'Certificación Registral',
-    keywords: ['certificacion registral', 'certificación registral', 'certificado registral', 'dominio', 'cargas', 'literal', 'valor probatorio', 'probatorio'],
-    answer: 'La Certificación Registral es un documento oficial del Registro de la Propiedad que acredita de forma fehaciente el contenido de los asientos registrales. A diferencia de la nota simple, sí tiene valor probatorio y puede utilizarse en procedimientos judiciales, herencias, bancos, reclamaciones o compraventas complejas.'
-  },
-  {
-    title: 'Cancelación de Carga',
-    keywords: ['cancelacion carga', 'cancelación carga', 'cancelar carga', 'hipoteca pagada', 'deuda cero', 'embargo levantado', 'condicion resolutoria', 'condición resolutoria'],
-    answer: 'La Cancelación de Carga sirve para eliminar del Registro una carga que ya no debería aparecer, como una hipoteca pagada, un embargo levantado o una condición extinguida. En una hipoteca suele requerirse certificado de deuda cero, escritura de cancelación, liquidación fiscal si procede y presentación en el Registro.'
-  },
-  {
-    title: 'Nota de Localización de Propiedades',
-    keywords: ['nota localizacion', 'nota de localizacion', 'localización propiedades', 'localizacion propiedades', 'bienes a nombre', 'propiedades de una persona', 'investigacion patrimonial', 'investigación patrimonial'],
-    answer: 'La Nota de Localización de Propiedades ayuda a saber en qué Registros de la Propiedad aparecen bienes o derechos inscritos a nombre de una persona o sociedad. No ofrece el detalle completo de cada inmueble, pero orienta sobre dónde existen inscripciones.'
-  },
-  {
-    title: 'Registro Civil',
-    keywords: ['registro civil', 'certificado nacimiento', 'certificado matrimonio', 'certificado defuncion', 'certificado defunción', 'nacimiento', 'matrimonio', 'defuncion', 'defunción'],
-    answer: 'Tramitium puede orientar sobre certificados del Registro Civil, como nacimiento, matrimonio y defunción. Estos documentos suelen utilizarse en DNI, pasaporte, nacionalidad, herencias, pensiones, seguros, trámites notariales o gestiones administrativas.'
-  },
-  {
-    title: 'Certificado de Nacimiento',
-    keywords: ['certificado nacimiento', 'nacimiento', 'literal nacimiento', 'extracto nacimiento', 'plurilingue nacimiento', 'plurilingüe nacimiento'],
-    answer: 'El Certificado de Nacimiento acredita oficialmente el nacimiento de una persona e incluye datos como fecha, hora, lugar, identidad, sexo y filiación. Puede necesitarse para DNI, pasaporte, matrimonio, nacionalidad, herencias, escolarización u otros trámites.'
-  },
-  {
-    title: 'Certificado de Matrimonio',
-    keywords: ['certificado matrimonio', 'matrimonio', 'conyuges', 'cónyuges', 'divorcio', 'nacionalidad matrimonio'],
-    answer: 'El Certificado de Matrimonio acredita que un matrimonio está inscrito en el Registro Civil. Puede ser necesario para herencias, extranjería, nacionalidad, divorcios, pensiones o cambios administrativos. Conviene aportar correctamente los datos de los cónyuges, fecha y lugar de celebración.'
-  },
-  {
-    title: 'Certificado de Defunción',
-    keywords: ['certificado defuncion', 'certificado defunción', 'defuncion', 'defunción', 'fallecimiento', 'seguros vida', 'herencia fallecido'],
-    answer: 'El Certificado de Defunción acredita oficialmente el fallecimiento de una persona. Suele ser necesario para herencias, seguros de vida, pensiones, cancelación de cuentas bancarias, trámites notariales y cambios de titularidad.'
-  },
-  {
-    title: 'Fe de Vida y Estado',
-    keywords: ['fe de vida', 'estado civil', 'persona viva', 'pension', 'pensión'],
-    answer: 'La Fe de Vida y Estado acredita que una persona está viva y cuál es su estado civil en la fecha de expedición. Normalmente requiere comparecencia personal en el Registro Civil con DNI, NIE o pasaporte, aunque algunos casos pueden admitir representación o documentación adicional.'
-  },
-  {
-    title: 'Cambio de Nombre',
-    keywords: ['cambio de nombre', 'cambiar nombre', 'apellidos', 'inversion apellidos', 'inversión apellidos', 'rectificar nombre'],
-    answer: 'El Cambio de Nombre o apellidos permite modificar oficialmente los datos cuando se cumplen requisitos legales, por ejemplo por uso habitual, adecuación lingüística, errores o inversión de apellidos. No es automático: el Registro Civil revisa la causa y la documentación aportada.'
-  },
-  {
-    title: 'Denominación Social',
-    keywords: ['denominacion social', 'denominación social', 'nombre sociedad', 'certificacion negativa', 'certificación negativa', 'registro mercantil central', 'constituir sociedad'],
-    answer: 'La Denominación Social es el nombre oficial de una sociedad. Antes de constituir una empresa se solicita una certificación negativa para acreditar que no existe otra sociedad con el mismo nombre o uno confundible. El Registro puede denegar nombres ya existentes, similares o no permitidos.'
-  },
-  {
-    title: 'Depósito de Cuentas Anuales',
-    keywords: ['deposito cuentas', 'depósito cuentas', 'cuentas anuales', 'balance', 'memoria', 'auditoria', 'auditoría', 'registro mercantil cuentas'],
-    answer: 'El Depósito de Cuentas Anuales es la presentación obligatoria de las cuentas de una sociedad ante el Registro Mercantil. Puede incluir balance, cuenta de pérdidas y ganancias, memoria, certificación de aprobación y, en algunos casos, informe de auditoría. Los errores en firmas, fechas o modelos pueden provocar defectos.'
-  },
-  {
-    title: 'Certificación Registral Mercantil',
-    keywords: ['certificacion mercantil', 'certificación mercantil', 'certificacion registral mercantil', 'administradores', 'poderes', 'vigencia sociedad', 'estatutos'],
-    answer: 'La Certificación Registral Mercantil acredita oficialmente contenido inscrito sobre una sociedad o empresario: administradores, vigencia, objeto social, capital, poderes, estatutos o actos societarios. Tiene más valor que una nota informativa porque es documento oficial expedido por el Registro.'
-  },
-  {
-    title: 'Inscripción de Escritura Mercantil',
-    keywords: ['inscripcion escritura mercantil', 'inscripción escritura mercantil', 'constitucion empresa', 'constitución empresa', 'ampliacion capital', 'ampliación capital', 'cambio domicilio', 'disolucion', 'disolución', 'liquidacion sociedad'],
-    answer: 'La Inscripción de Escritura Mercantil consiste en presentar en el Registro Mercantil una escritura sobre una sociedad: constitución, nombramiento o cese de administradores, ampliación de capital, cambio de domicilio, modificación de estatutos, disolución, liquidación o apoderamientos.'
-  },
-  {
-    title: 'Nota Simple Mercantil',
-    keywords: ['nota simple mercantil', 'sociedad', 'empresa', 'borme', 'capital social', 'apoderados', 'administrador empresa'],
-    answer: 'La Nota Simple Mercantil ofrece información básica de una empresa inscrita: datos generales, capital social, administradores, apoderados, actos publicados en el BORME, cuentas depositadas o libros legalizados. Ayuda a comprobar la existencia de una sociedad y quién la administra.'
-  },
-  {
-    title: 'Informe DGT por Matrícula',
-    keywords: ['trafico', 'tráfico', 'dgt', 'vehiculo', 'vehículo', 'matricula', 'matrícula', 'coche', 'moto', 'reserva de dominio', 'itv', 'precinto'],
-    answer: 'El Informe DGT por Matrícula permite conocer información pública disponible sobre un vehículo matriculado en España. Es útil antes de comprar un vehículo de segunda mano porque puede mostrar cargas, incidencias, limitaciones, historial administrativo, titularidad o datos técnicos según el informe.'
-  },
-  {
-    title: 'Contrato Privado',
-    keywords: ['contrato privado', 'contrato compraventa', 'prestamo entre particulares', 'préstamo entre particulares', 'alquiler', 'reconocimiento de deuda', 'cesion', 'cesión'],
-    answer: 'La Elaboración de Contrato Privado consiste en redactar un documento entre particulares o empresas para fijar condiciones de una operación: partes, objeto, precio, pago, plazos, responsabilidades, garantías, documentación y consecuencias por incumplimiento. Usar modelos genéricos puede dejar cláusulas importantes fuera.'
-  },
-  {
-    title: 'Plazos',
-    keywords: ['plazo', 'tardais', 'tardáis', 'tiempo', 'cuando', '24h', '24 horas', 'urgente'],
-    answer: 'El equipo responde normalmente en menos de 24 horas. Los plazos de entrega pueden variar según el registro y el tipo de trámite, pero la gestión se inicia al recibir el formulario y el pago.'
-  },
-  {
-    title: 'Proceso',
-    keywords: ['como funciona', 'cómo funciona', 'proceso', 'pasos', 'contratar', 'solicitar', 'tramite', 'trámite'],
-    answer: 'El proceso es sencillo: elija el trámite, complete el formulario, realice el pago seguro y el equipo de Tramitium gestionará la solicitud. Muchos trámites pueden hacerse por cuenta propia, pero una gestión especializada ayuda a evitar errores, rechazos, datos incompletos y documentos incorrectos.'
-  },
-  {
-    title: 'Contacto',
-    keywords: ['contacto', 'email', 'correo', 'telefono', 'teléfono', 'hablar', 'ayuda', 'duda'],
-    answer: `Puede escribir a ${CHAT_CONTACT_EMAIL}. El equipo de Tramitium le dará respuesta en menos de 24 horas. También puede usar el formulario de contacto de esta página.`
-  },
-  {
-    title: 'Autorización',
-    keywords: ['autorizacion', 'autorización', 'representante', 'tercero', 'poder'],
-    answer: 'Algunos trámites requieren poder o autorización firmada, especialmente cuando actúa un representante o tercero. Si el formulario la solicita, debe adjuntarla en PDF, JPG o PNG.'
-  }
-];
-
-
-function normalizeChatText(value) {
-  return String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-
 function addChatMessage(type, text) {
   const messages = document.getElementById('chatMessages');
   const message = document.createElement('div');
