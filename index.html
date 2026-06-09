@@ -6,11 +6,11 @@
 <title>Tramitium | Gestoría online para trámites administrativos</title>
 <meta name="description" content="En Tramitium te ayudamos a gestionar trámites administrativos online de forma sencilla, cómoda y sin desplazamientos.">
 <!-- i18n-seo-start -->
-<link rel="canonical" href="https://www.tramitium.es/">
-<link rel="alternate" hreflang="es" href="https://www.tramitium.es/">
-<link rel="alternate" hreflang="en" href="https://www.tramitium.es/en/">
-<link rel="alternate" hreflang="de" href="https://www.tramitium.es/de/">
-<link rel="alternate" hreflang="x-default" href="https://www.tramitium.es/">
+<link rel="canonical" href="https://tramitium.es/">
+<link rel="alternate" hreflang="es" href="https://tramitium.es/">
+<link rel="alternate" hreflang="en" href="https://tramitium.es/en/">
+<link rel="alternate" hreflang="de" href="https://tramitium.es/de/">
+<link rel="alternate" hreflang="x-default" href="https://tramitium.es/">
 <!-- i18n-seo-end -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -149,6 +149,9 @@
   .services-list li:last-child { border-bottom: none; }
   .services-list li:hover { color: var(--gold-light); padding-left: 6px; }
   .services-list li::before { content: '→'; color: var(--gold); font-size: 12px; flex-shrink: 0; }
+
+  .services-list a { display: flex; align-items: center; gap: 10px; width: 100%; color: inherit; text-decoration: none; }
+  .services-list a:hover { color: inherit; }
   .service-price { font-size: 11px; letter-spacing: 1px; color: var(--gold); margin-left: auto; opacity: 0.7; white-space: nowrap; }
 
   .process-section { padding: clamp(60px, 10vw, 120px) 5%; background: var(--cream); max-width: 1320px; margin: 0 auto; }
@@ -307,6 +310,28 @@
   .blog-card-actions .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
   @media (max-width: 1024px) { .blog-grid { grid-template-columns: 1fr; } }
 </style>
+
+<!-- structured-data-start -->
+<script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Tramitium",
+    "url": "https://tramitium.es",
+    "email": "contactos@tramitium.es",
+    "areaServed": "España",
+    "priceRange": "€€",
+    "serviceType": "Gestoría online para trámites administrativos"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tramitium",
+    "url": "https://tramitium.es",
+    "inLanguage": "es"
+  }
+]</script>
+<!-- structured-data-end -->
 </head>
 <body>
 <nav>
@@ -388,42 +413,42 @@
       <span class="registry-number">01</span><div class="registry-icon">⌂</div><span class="registry-subtitle">Registro 01</span><h3 class="registry-title">Registro de la Propiedad</h3>
       <p class="registry-desc">Inscripciones, notas simples y certificaciones relativas a bienes inmuebles y derechos reales.</p>
       <ul class="services-list">
-        <li onclick="openModal('prop-nota-simple')">Nota Simple Informativa <span class="service-price">desde 25€</span></li>
-        <li onclick="openModal('prop-inscripcion')">Inscripción de Escritura <span class="service-price">desde 150€</span></li>
-        <li onclick="openModal('prop-certificacion')">Certificación Registral <span class="service-price">desde 95€</span></li>
-        <li onclick="openModal('prop-cancelacion')">Cancelación de Carga <span class="service-price">desde 230€</span></li>
-        <li onclick="openModal('prop-localizacion')">Nota de Localización de Propiedades <span class="service-price">desde 25€</span></li>
+        <li><a href="/servicios/nota-simple-informativa/" onclick="event.preventDefault(); openModal('prop-nota-simple')">Nota Simple Informativa <span class="service-price">desde 25€</span></a></li>
+        <li><a href="/servicios/inscripcion-escritura-registro-propiedad/" onclick="event.preventDefault(); openModal('prop-inscripcion')">Inscripción de Escritura <span class="service-price">desde 150€</span></a></li>
+        <li><a href="/servicios/certificacion-registral/" onclick="event.preventDefault(); openModal('prop-certificacion')">Certificación Registral <span class="service-price">desde 95€</span></a></li>
+        <li><a href="/servicios/cancelacion-carga-registro-propiedad/" onclick="event.preventDefault(); openModal('prop-cancelacion')">Cancelación de Carga <span class="service-price">desde 230€</span></a></li>
+        <li><a href="/servicios/nota-localizacion-propiedades/" onclick="event.preventDefault(); openModal('prop-localizacion')">Nota de Localización de Propiedades <span class="service-price">desde 25€</span></a></li>
       </ul>
     </div>
     <div class="registry-card reveal">
       <span class="registry-number">02</span><div class="registry-icon">☷</div><span class="registry-subtitle">Registro 02</span><h3 class="registry-title">Registro Civil</h3>
       <p class="registry-desc">Certificados y gestiones relativas al estado civil: nacimientos, matrimonios, defunciones y más.</p>
       <ul class="services-list">
-        <li onclick="openModal('civil-nacimiento')">Certificado de Nacimiento <span class="service-price">desde 30€</span></li>
-        <li onclick="openModal('civil-matrimonio')">Certificado de Matrimonio <span class="service-price">desde 30€</span></li>
-        <li onclick="openModal('civil-defuncion')">Certificado de Defunción <span class="service-price">desde 30€</span></li>
-        <li onclick="openModal('civil-fe-vida')">Fe de Vida y Estado <span class="service-price">desde 45€</span></li>
-        <li onclick="openModal('civil-cambio-nombre')">Cambio de Nombre <span class="service-price">desde 150€</span></li>
+        <li><a href="/servicios/certificado-nacimiento-online/" onclick="event.preventDefault(); openModal('civil-nacimiento')">Certificado de Nacimiento <span class="service-price">desde 35€</span></a></li>
+        <li><a href="/servicios/certificado-matrimonio-online/" onclick="event.preventDefault(); openModal('civil-matrimonio')">Certificado de Matrimonio <span class="service-price">desde 35€</span></a></li>
+        <li><a href="/servicios/certificado-defuncion-online/" onclick="event.preventDefault(); openModal('civil-defuncion')">Certificado de Defunción <span class="service-price">desde 35€</span></a></li>
+        <li><a href="/servicios/fe-de-vida-y-estado/" onclick="event.preventDefault(); openModal('civil-fe-vida')">Fe de Vida y Estado <span class="service-price">desde 60€</span></a></li>
+        <li><a href="/servicios/cambio-nombre-registro-civil/" onclick="event.preventDefault(); openModal('civil-cambio-nombre')">Cambio de Nombre <span class="service-price">desde 385€</span></a></li>
       </ul>
     </div>
     <div class="registry-card reveal">
       <span class="registry-number">03</span><div class="registry-icon">▣</div><span class="registry-subtitle">Registro 03</span><h3 class="registry-title">Registro Mercantil</h3>
       <p class="registry-desc">Constitución y gestión de sociedades, depósito de cuentas, certificaciones y notas mercantiles.</p>
       <ul class="services-list">
-        <li onclick="openModal('merc-denominacion')">Denominación Social <span class="service-price">desde 60€</span></li>
-        <li onclick="openModal('merc-deposito')">Depósito de Cuentas Anuales <span class="service-price">desde 150€</span></li>
-        <li onclick="openModal('merc-certificacion')">Certificación Registral <span class="service-price">desde 80€</span></li>
-        <li onclick="openModal('merc-inscripcion')">Inscripción de Escritura <span class="service-price">desde 205€</span></li>
-        <li onclick="openModal('merc-nota')">Nota Simple Mercantil <span class="service-price">desde 25€</span></li>
+        <li><a href="/servicios/denominacion-social/" onclick="event.preventDefault(); openModal('merc-denominacion')">Denominación Social <span class="service-price">desde 60€</span></a></li>
+        <li><a href="/servicios/deposito-cuentas-anuales/" onclick="event.preventDefault(); openModal('merc-deposito')">Depósito de Cuentas Anuales <span class="service-price">desde 150€</span></a></li>
+        <li><a href="/servicios/certificacion-registral-mercantil/" onclick="event.preventDefault(); openModal('merc-certificacion')">Certificación Registral <span class="service-price">desde 80€</span></a></li>
+        <li><a href="/servicios/inscripcion-escritura-mercantil/" onclick="event.preventDefault(); openModal('merc-inscripcion')">Inscripción de Escritura <span class="service-price">desde 205€</span></a></li>
+        <li><a href="/servicios/nota-simple-mercantil/" onclick="event.preventDefault(); openModal('merc-nota')">Nota Simple Mercantil <span class="service-price">desde 25€</span></a></li>
       </ul>
     </div>
     <div class="registry-card reveal">
       <span class="registry-number">04</span><div class="registry-icon">§</div><span class="registry-subtitle">Trámite 04</span><h3 class="registry-title">Otros servicios</h3>
       <p class="registry-desc">Informes de empresa y vehículos, junto con contratos privados adaptados a cada operación.</p>
       <ul class="services-list">
-        <li onclick="openModal('informe-empresarial')">Informe Empresarial Integral <span class="service-price">desde 15€</span></li>
-        <li onclick="openModal('trafico-informe-matricula')">Informe DGT por Matrícula <span class="service-price">desde 25€</span></li>
-        <li onclick="openModal('contrato-privado')">Elaboración de Contrato Privado <span class="service-price">desde 40€</span></li>
+        <li><a href="/servicios/informe-empresarial-integral/" onclick="event.preventDefault(); openModal('informe-empresarial')">Informe Empresarial Integral <span class="service-price">desde 15€</span></a></li>
+        <li><a href="/servicios/informe-dgt-matricula/" onclick="event.preventDefault(); openModal('trafico-informe-matricula')">Informe DGT por Matrícula <span class="service-price">desde 25€</span></a></li>
+        <li><a href="/servicios/contrato-privado/" onclick="event.preventDefault(); openModal('contrato-privado')">Elaboración de Contrato Privado <span class="service-price">desde 40€</span></a></li>
       </ul>
     </div>
   </div>
@@ -1257,6 +1282,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (close) close.addEventListener('click', () => toggleChat(false));
 });
 
+
+function openServiceFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const serviceKey = params.get('servicio');
+  if (serviceKey && SERVICES[serviceKey]) {
+    setTimeout(() => openModal(serviceKey), 180);
+  }
+}
+window.addEventListener('DOMContentLoaded', openServiceFromUrl);
 </script>
 </body>
 </html>

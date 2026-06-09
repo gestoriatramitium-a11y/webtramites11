@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.tramitium.es/</loc></url>
-  <url><loc>https://www.tramitium.es/en/</loc></url>
-  <url><loc>https://www.tramitium.es/de/</loc></url>
-  <url><loc>https://www.tramitium.es/blog/</loc></url>
-  <url><loc>https://www.tramitium.es/en/blog/</loc></url>
-  <url><loc>https://www.tramitium.es/de/blog/</loc></url>
+  <url><loc>https://tramitium.es/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/en/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/de/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/blog/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/en/blog/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/de/blog/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/nota-simple-informativa/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/nota-localizacion-propiedades/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/inscripcion-escritura-registro-propiedad/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/certificacion-registral/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/cancelacion-carga-registro-propiedad/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/certificado-nacimiento-online/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/certificado-matrimonio-online/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/certificado-defuncion-online/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/fe-de-vida-y-estado/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/cambio-nombre-registro-civil/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/denominacion-social/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/deposito-cuentas-anuales/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/certificacion-registral-mercantil/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/inscripcion-escritura-mercantil/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/nota-simple-mercantil/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/informe-dgt-matricula/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/informe-empresarial-integral/</loc><lastmod>2026-06-09</lastmod></url>
+  <url><loc>https://tramitium.es/servicios/contrato-privado/</loc><lastmod>2026-06-09</lastmod></url>
 </urlset>

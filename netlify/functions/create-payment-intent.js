@@ -1,5 +1,5 @@
 const Stripe = require('stripe');
-const { SERVICES, jsonResponse, parseJson, isEmail, cleanText } = require('./_services');
+const { SERVICES, jsonResponse, parseJson, isEmail, cleanText, formDataToText } = require('./_services');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -19,6 +19,8 @@ exports.handler = async (event) => {
 
   const clientEmail = cleanText(body.clientEmail, 180);
   const reference = cleanText(body.reference, 60) || `TRM-${Date.now().toString().slice(-8)}`;
+  const formDataText = formDataToText(body.formData).slice(0, 500);
+  const hasAuthorization = Boolean(body.attachments && body.attachments.autorizacion);
 
   try {
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
@@ -32,7 +34,9 @@ exports.handler = async (event) => {
         reference,
         service_key: serviceKey,
         service_title: service.title,
-        client_email: clientEmail
+        client_email: clientEmail,
+        form_data: formDataText || 'No indicado',
+        has_authorization: hasAuthorization ? 'si' : 'no'
       }
     });
 
